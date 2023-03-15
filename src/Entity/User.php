@@ -61,13 +61,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->announces = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->donations = new ArrayCollection();
-        $this->createdAt =  new \DateTime();
-        $this->createdAt = new \DateTime();
-    }
-
-    #[ORM\PrePersist]
-    public function prePersist(): void
-    {
         $this->createdAt = new \DateTime();
     }
 

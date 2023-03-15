@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ronron | Décrire le chat{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mb-3">Description du chat</h1>
+
+
+        {{ form_start(formCat) }}
+
+        {{ form_row(formCat.name) }}
+        {{ form_errors(formCat.name) }}
+
+        {{ form_row(formCat.color) }}
+        {{ form_errors(formCat.color) }}
+
+        {{ form_row(formCat.age) }}
+        {{ form_errors(formCat.age) }}
+
+        {{ form_row(formCat.breed) }}
+        {{ form_errors(formCat.breed) }}
+
+        {{ form_row(formCat.tattoo) }}
+        {{ form_errors(formCat.tattoo) }}
+
+        {{ form_row(formCat.sterelized) }}
+        {{ form_errors(formCat.sterelized) }}
+
+        {{ form_row(formCat.designCoat) }}
+        {{ form_errors(formCat.designCoat) }}
+
+        {{ form_row(formCat.lengthCoat) }}
+        {{ form_errors(formCat.lengthCoat) }}
+
+        {{ form_row(formCat.sexe) }}
+        {{ form_errors(formCat.sexe) }}
+
+        {{ form_row(formCat.chip) }}
+        {{ form_errors(formCat.chip) }}
+
+        {{ form_row(formCat.picture) }}
+        {{ form_errors(formCat.picture) }}
+
+        <button type="submit" >Valider le chat</button>
+
+        {{ form_end(formCat) }}
+
+
+{% endblock %}
