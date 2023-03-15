@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccountController!{% endblock %}
+
+{% block body %}
+<h1 class="text-center">Bienvenu sur votre compte  {{ app.user.pseudo }} ! </h1>
+    <p class="text-center">Ici vous pouvez modifier toutes les informations relatives à votre compte ou <a href="{{ path('change_password') }}">
+            Modifier mon mot de passe</a>.</p>
+
+
+
+    {{ form_start(formEdit) }}
+    {{ form_row(formEdit.email) }}
+    {{ form_errors(formEdit.email) }}
+
+    {{ form_row(formEdit.pseudo) }}
+    {{ form_errors(formEdit.pseudo) }}
+
+
+    <button type="submit">Modifier mes informations</button>
+
+    {{ form_end(formEdit) }}
+
+    <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ?')" href="{{ path('delete_account') }}"> Supprimer mon compte</a>
+{% endblock %}
