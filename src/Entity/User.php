@@ -60,6 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->favorite = new ArrayCollection();
         $this->announces = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->donations = new ArrayCollection();
         $this->createdAt = new \DateTime();
     }
 

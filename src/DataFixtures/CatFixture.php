@@ -32,7 +32,6 @@ class CatFixture extends Fixture
             $cat = new Cat();
             $cat
                 ->setName($faker->randomElement(['Pichu', 'Dwitch', 'Kacha']))
-                ->setColor($faker->randomElement(['Noir', 'Blanc', 'Vert']))
                 ->setAge($faker->randomElement(['2', '3', '8']))
                 ->setBreed($faker->randomElement(['Aucune', 'Maincoon', 'Egyptien']))
                 ->setTattoo($faker->randomElement(['Oui', 'Non']))
