@@ -91,4 +91,18 @@ class AnnounceController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/announce/{id}', name: 'app_announce_show')]
+    public function show($id): Response
+    {
+        $announce = $this->entityManager->getRepository(Announce::class)->find($id);
+        $cat = $announce->getCat();
+
+        return $this->render('announce/show.html.twig', [
+            'announce' => $announce,
+            'cat' => $cat,
+        ]);
+    }
+
+
 }
