@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ announce.type }}</h1>
+    <p>{{ announce.description }}</p>
+    <p>Date: {{ announce.dateCat|date('d/m/Y') }}</p>
+    <p>Vu la dernière fois : {{ announce.street ?? '' }}, {{ announce.cp }} {{ announce.city }}, {{ announce.country }}</p>
+    <p>Statut: {{ announce.state ?? 'N/A' }}</p>
+
+    <div class="card mt-4">
+        <h2 class="card-header">Information sur le chat</h2>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Nom: {{ announce.cat.name ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">Couleur: {{ announce.cat.color ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">Age: {{ announce.cat.age ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">Race: {{ announce.cat.breed ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">Tatouage: {{ announce.cat.tattoo ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">Stérélisé: {{ announce.cat.sterelized ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">
+                    <strong>Pelage:</strong>
+                    <ul>
+                        <li>Style: {{ announce.cat.designCoat ?? 'Non renseigné' }}</li>
+                        <li>Longueur: {{ announce.cat.lengthCoat ?? 'Non renseigné' }}</li>
+                    </ul>
+                </li>
+                <li class="list-group-item">Sexe: {{ announce.cat.sexe ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">Puce: {{ announce.cat.chip ?? 'Non renseigné' }}</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
