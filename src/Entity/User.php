@@ -60,6 +60,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->favorite = new ArrayCollection();
         $this->announces = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->donations = new ArrayCollection();
+        $this->createdAt =  new \DateTime();
         $this->createdAt = new \DateTime();
     }
 
@@ -154,6 +156,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
+    }
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->createdAt = new \DateTime();
     }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): self
