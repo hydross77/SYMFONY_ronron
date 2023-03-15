@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
-class Comment
+class Comment extends \App\Entity\Announce
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,6 +26,17 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Announce $announce = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {

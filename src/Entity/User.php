@@ -41,8 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Donation $donation = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cat::class)]
     private Collection $cat;
@@ -56,16 +54,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Donation::class)]
-    private Collection $donations;
-
     public function __construct()
     {
         $this->cat = new ArrayCollection();
         $this->favorite = new ArrayCollection();
         $this->announces = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->donations = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -294,36 +295,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Donation>
-     */
-    public function getDonations(): Collection
-    {
-        return $this->donations;
-    }
-
-    public function addDonation(Donation $donation): self
-    {
-        if (!$this->donations->contains($donation)) {
-            $this->donations->add($donation);
-            $donation->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDonation(Donation $donation): self
-    {
-        if ($this->donations->removeElement($donation)) {
-            // set the owning side to null (unless already changed)
-            if ($donation->getUser() === $this) {
-                $donation->setUser(null);
             }
         }
 
