@@ -20,5 +20,8 @@
         </div>
     {% endfor %}
         {% block body %}{% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('js/script.js') }}"></script>
+    {% endblock %}
     </body>
 </html>

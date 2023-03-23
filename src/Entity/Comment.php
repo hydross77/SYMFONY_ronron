@@ -8,8 +8,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
-class Comment extends \App\Entity\Announce
+class Comment
 {
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,10 +32,7 @@ class Comment extends \App\Entity\Announce
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Announce $announce = null;
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
-    }
+
 
     #[ORM\PrePersist]
     public function prePersist(): void

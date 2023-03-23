@@ -67,6 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\PrePersist]
     public function prePersist(): void
     {
+
         $this->createdAt = new \DateTime();
     }
 

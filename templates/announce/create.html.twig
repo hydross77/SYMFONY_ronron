@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ronron | Poster une annonce{% endblock %}
+
+{% block body %}
+<h1 class="text-center mb-3">Poster une annonce</h1>
+{{ form_start(form) }}
+
+        {{ form_row(form.type) }}
+        {{ form_row(form.dateCat) }}
+        {{ form_row(form.cp) }}
+        {{ form_row(form.street) }}
+        {{ form_row(form.city) }}
+        {{ form_row(form.country) }}
+        {{ form_row(form.description) }}
+
+        {{ form_errors(form) }}
+
+<button type="submit">Envoyer</button>
+
+{{ form_end(form) }}
+
+{% endblock %}
