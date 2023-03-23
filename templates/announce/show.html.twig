@@ -5,7 +5,15 @@
     <p>Description : {{ announce.description }}</p>
     <p>Date: {{ announce.dateCat|date('d/m/Y') }}</p>
     <p>Vu la dernière fois : {{ announce.street ?? '' }}, {{ announce.cp }} {{ announce.city }}, {{ announce.country }}</p>
-    <p>Statut: {{ announce.state ?? 'en ligne' }}</p>
+    Status : {% if workflow_has_marked_place(announce, 'online') %}
+    en ligne
+{% elseif workflow_has_marked_place(announce, 'found') %}
+    retrouver
+{% endif %}
+
+    {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
+        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}" class="btn btn-primary">Chat retrouvé</a>
+    {% endif %}
 
     <div class="card mt-4">
         <h2 class="card-header">Information sur le chat</h2>

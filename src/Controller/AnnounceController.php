@@ -13,17 +13,23 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Workflow\Exception\LogicException;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class AnnounceController extends AbstractController
 {
     private $entityManager;
+    private $announceWorkflow;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, WorkflowInterface $announceWorkflow)
     {
         $this->entityManager = $entityManager;
+        $this->announceWorkflow = $announceWorkflow;
     }
 
     #[Route('/new/cat', name: 'app_new_cat')]
@@ -39,7 +45,6 @@ class AnnounceController extends AbstractController
             $user = $this->getUser();
             // Associer l'utilisateur courant à l'annonce
             $cat->addUser($user);
-            $cat->addColor();
 
             $this->entityManager->persist($cat);
             $this->entityManager->flush();
@@ -74,15 +79,21 @@ class AnnounceController extends AbstractController
 
             $user = $this->getUser();
 
-            // Associer l'utilisateur courant à l'annonce
+            // Associate the current user with the announcement
             $announce->setUser($user);
 
-
             $this->entityManager->persist($user);
+
+            try{
+                $this->announceWorkflow->apply($announce, 'to_online');
+            }catch(\LogicException $exception){
+
+            }
+
             $this->entityManager->persist($announce);
             $this->entityManager->flush();
 
-            // Rediriger vers la page de l'annonce créée
+            // Redirect to the page of the created announcement
             $announceId = $announce->getId();
             return $this->redirectToRoute('app_announce_show', ['id' => $announceId]);
         }
@@ -130,6 +141,35 @@ class AnnounceController extends AbstractController
             'comments' => $comments,
         ]);
     }
+
+    #[Route('/announce/{id}/change_state/{state}', name: 'app_announce_change_state')]
+    public function changeState(Announce $announce, string $state): Response
+    {
+        // Vérifier que l'utilisateur connecté est le propriétaire de l'annonce
+        $user = $this->getUser();
+        if (!$announce->getUser() || $announce->getUser()->getId() !== $user->getId()) {
+            throw new AccessDeniedHttpException("Vous n'êtes pas autorisé à changer l'état de cette annonce.");
+        }
+
+        // Vérifier que l'état demandé est une transition valide
+        if (!$this->announceWorkflow->can($announce, $state)) {
+            throw new BadRequestHttpException("La transition $state n'est pas autorisée pour cette annonce.");
+        }
+
+        // Appliquer la transition demandée sur l'annonce
+        try {
+            $this->announceWorkflow->apply($announce, $state);
+        } catch (LogicException $e) {
+            throw new BadRequestHttpException("Impossible de changer l'état de l'annonce : " . $e->getMessage());
+        }
+
+        // Enregistrer les modifications dans la base de données
+        $this->entityManager->flush();
+
+        // Rediriger vers la page de l'annonce modifiée
+        return $this->redirectToRoute('app_announce_show', ['id' => $announce->getId()]);
+    }
+
 
     #[Route('/delete/{id}', name: 'app_comment_delete')]
     public function delete(Request $request, Comment $comment): Response
