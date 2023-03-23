@@ -40,7 +40,7 @@ class AnnounceController extends AbstractController
             // Associer l'utilisateur courant à l'annonce
             $cat->setUser($user);
 
-            $this->entityManager->persist($user);
+
             $this->entityManager->persist($cat);
             $this->entityManager->flush();
 
@@ -54,6 +54,7 @@ class AnnounceController extends AbstractController
             'formCat' => $formCat->createView(),
         ]);
     }
+
 
     #[Route('/announce/create', name: 'app_announce_create')]
     public function create(Request $request, SessionInterface $session): Response

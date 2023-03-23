@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Cat;
+use App\Entity\Color;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -19,9 +21,13 @@ class CatType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Quel est son nom ?'
             ])
-            ->add('color', TextType::class, [
-                'label' => 'De quelle couleur ?'
+            ->add('color', EntityType::class, [
+                'label' => 'De quelle couleur ?',
+                'mapped'=>false,
+                'class' => Color::class,
+                'choice_label' => 'name',
             ])
+
             ->add('age', IntegerType::class, [
                 'label' => 'Quel est son âge ?'
             ])
