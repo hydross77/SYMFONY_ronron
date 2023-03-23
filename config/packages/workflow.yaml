@@ -1,0 +1,23 @@
+framework:
+    workflows:
+        announce:
+            type: 'workflow'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: 'method'
+                property: 'state'
+            supports:
+                - App\Entity\Announce
+            initial_marking: redaction
+            places:
+                - redaction
+                - online
+                - found
+            transitions:
+                to_online:
+                    from: redaction
+                    to: online
+                to_found:
+                    from: online
+                    to: found

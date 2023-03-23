@@ -43,6 +43,7 @@
         "symfony/twig-bundle": "6.2.*",
         "symfony/validator": "6.2.*",
         "symfony/web-link": "6.2.*",
+        "symfony/workflow": "6.2.*",
         "symfony/yaml": "6.2.*",
         "symfonycasts/verify-email-bundle": "^1.13",
         "twig/extra-bundle": "^2.12|^3.0",

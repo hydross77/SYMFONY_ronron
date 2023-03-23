@@ -38,7 +38,7 @@ class Announce
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $state = null;
+    private ?array $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'announces')]
     private ?Cat $cat = null;
@@ -52,6 +52,7 @@ class Announce
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -143,15 +144,14 @@ class Announce
         return $this;
     }
 
-    public function getState(): ?string
+    public function getState()
     {
         return $this->state;
     }
 
-    public function setState(?string $state): self
+    public function setState($state, $context = []): self
     {
         $this->state = $state;
-
         return $this;
     }
 
