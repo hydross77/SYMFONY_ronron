@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>{{ announce.type }}</h1>
-    <p>{{ announce.description }}</p>
+    <h1>Annonce de chat {{ announce.type }}</h1>
+    <p>Description : {{ announce.description }}</p>
     <p>Date: {{ announce.dateCat|date('d/m/Y') }}</p>
     <p>Vu la dernière fois : {{ announce.street ?? '' }}, {{ announce.cp }} {{ announce.city }}, {{ announce.country }}</p>
-    <p>Statut: {{ announce.state ?? 'N/A' }}</p>
+    <p>Statut: {{ announce.state ?? 'en ligne' }}</p>
 
     <div class="card mt-4">
         <h2 class="card-header">Information sur le chat</h2>
@@ -29,4 +29,33 @@
             </ul>
         </div>
     </div>
+
+    <h2>Commentaires</h2>
+
+    {% if comments %}
+
+        {% for comment in comments %}
+            <p>{{ comment.content }} de {{ comment.user.pseudo }} le {{ comment.createdAt | date('d-m-Y') }}
+                {% if comment.user == app.user %}
+                    <a href="{{ path("app_comment_delete", {'id':comment.id}) }}">Supprimer</a>
+                {% endif %}
+            </p>
+        {% endfor %}
+
+
+    {% else %}
+
+    <p> Aucun commentaire pour le moment</p>
+
+    {% endif %}
+
+    {% if app.user %}
+        <h2>Ajouter un commentaire</h2>
+
+        {{ form_start(comment_form) }}
+        <button type="submit">Envoyer</button>
+        {{ form_end(comment_form) }}
+        {% else %}
+        Veuillez <a href="{{ path('app_login') }}"> vous connecter</a> pour commenter
+    {% endif %}
 {% endblock %}
