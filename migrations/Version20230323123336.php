@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230315094429 extends AbstractMigration
+final class Version20230323123336 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,16 +20,12 @@ final class Version20230315094429 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D6494DC1279C');
-        $this->addSql('DROP INDEX IDX_8D93D6494DC1279C ON user');
-        $this->addSql('ALTER TABLE user DROP donation_id');
+        $this->addSql('ALTER TABLE comment DROP type, DROP date_cat, DROP cp, DROP street, DROP city, DROP country, DROP description, DROP state');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD donation_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6494DC1279C FOREIGN KEY (donation_id) REFERENCES donation (id)');
-        $this->addSql('CREATE INDEX IDX_8D93D6494DC1279C ON user (donation_id)');
+        $this->addSql('ALTER TABLE comment ADD type VARCHAR(255) NOT NULL, ADD date_cat DATE NOT NULL, ADD cp VARCHAR(255) NOT NULL, ADD street VARCHAR(255) DEFAULT NULL, ADD city VARCHAR(255) NOT NULL, ADD country VARCHAR(255) NOT NULL, ADD description LONGTEXT DEFAULT NULL, ADD state VARCHAR(255) DEFAULT NULL');
     }
 }

@@ -17,6 +17,7 @@ class ResultController extends AbstractController
     {
         $query = $request->query->get('type');
         $city = $request->query->get('city');
+        $color = $request->query->get('color');
 
         $user = $this->getUser() ?? null;
         /*$freelances = $repository->findSearch([
@@ -25,9 +26,10 @@ class ResultController extends AbstractController
         ]);*/
         // les profils paginé
         $announces = $paginator->paginate(
-            $repository->findSearch([
+            $repository->findSearch2([
                 'type' => $query,
                 'city' => $city,
+                'color' => $color,
             ]),
             $request->query->getInt('page', 1),
             12

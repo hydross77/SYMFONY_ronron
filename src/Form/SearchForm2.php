@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Cat;
+use App\Entity\Color;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -26,11 +27,12 @@ class SearchForm2 extends SearchForm
             ->add('color', EntityType::class, [
                 'label' => false,
                 'required' => false,
-                'class' => Cat::class,
-                'expanded' => false,
-                'multiple' => false,
-                'choice_label' => 'color',
+                'class' => Color::class,
+                'expanded' => true,
+                'multiple' => true,
+                'choice_label' => 'name',
                 'choice_value' => 'id',
+                'placeholder' => 'Choisir une couleur',
             ]);
     }
 
