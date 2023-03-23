@@ -55,13 +55,13 @@ class Cat
     private Collection $announces;
 
     #[ORM\ManyToMany(targetEntity: Color::class, inversedBy: 'cats')]
-    private Collection $couleur;
+    private Collection $color;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->announces = new ArrayCollection();
-        $this->couleur = new ArrayCollection();
+        $this->color = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -261,23 +261,23 @@ class Cat
     /**
      * @return Collection<int, Color>
      */
-    public function getCouleur(): Collection
+    public function getColor(): Collection
     {
-        return $this->couleur;
+        return $this->color;
     }
 
-    public function addCouleur(Color $couleur): self
+    public function addColor(Color $color): self
     {
-        if (!$this->couleur->contains($couleur)) {
-            $this->couleur->add($couleur);
+        if (!$this->color->contains($color)) {
+            $this->color->add($color);
         }
 
         return $this;
     }
 
-    public function removeCouleur(Color $couleur): self
+    public function removeColor(Color $color): self
     {
-        $this->couleur->removeElement($couleur);
+        $this->color->removeElement($color);
 
         return $this;
     }
