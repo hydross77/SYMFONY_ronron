@@ -18,9 +18,6 @@ class Cat
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $color = null;
-
     #[ORM\Column(length: 2, nullable: true)]
     private ?string $age = null;
 
@@ -57,10 +54,14 @@ class Cat
     #[ORM\OneToMany(mappedBy: 'cat', targetEntity: Announce::class)]
     private Collection $announces;
 
+    #[ORM\ManyToMany(targetEntity: Color::class, inversedBy: 'cats')]
+    private Collection $couleur;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->announces = new ArrayCollection();
+        $this->couleur = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,18 +77,6 @@ class Cat
     public function setName(?string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(string $color): self
-    {
-        $this->color = $color;
 
         return $this;
     }
@@ -265,6 +254,30 @@ class Cat
                 $announce->setCat(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Color>
+     */
+    public function getCouleur(): Collection
+    {
+        return $this->couleur;
+    }
+
+    public function addCouleur(Color $couleur): self
+    {
+        if (!$this->couleur->contains($couleur)) {
+            $this->couleur->add($couleur);
+        }
+
+        return $this;
+    }
+
+    public function removeCouleur(Color $couleur): self
+    {
+        $this->couleur->removeElement($couleur);
 
         return $this;
     }

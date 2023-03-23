@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Announce;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Exception;
 
 /**
  * @extends ServiceEntityRepository<Announce>
@@ -20,6 +22,76 @@ class AnnounceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Announce::class);
     }
+
+    /**
+     * Récupère les Announces en lien avec une recherche
+     * @return Announce[]
+     */
+    public function findSearch(array $parameters): Query //parameters est le tableau
+    {
+        $qb = $this->createQueryBuilder('a');
+        // fait une requête sur l'entité 'A' : 'ANNOUNCE'
+
+
+
+        if (!empty($parameters['type'])) {
+            $qb->andWhere('a.type = :type')
+                ->setParameter('type', $parameters['type']);
+        }
+
+
+        if (!empty($parameters['city'])) {
+            $qb->andWhere('a.city = :city')
+                ->setParameter('city', $parameters['city']);
+        }
+        //dd($qb->getDQL());
+        // requete bdd
+
+
+
+        return $qb->getQuery();
+        //->getResult(); //retourne le tableau des résultats
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function findSearch2(array $parameters): Query
+    {
+        $qb = $this->createQueryBuilder('a');
+        $qb->join('a.cat_id', 'cat');
+
+        if (!empty($parameters['name'])) {
+            $qb->andWhere('cat.name LIKE :name')
+                ->setParameter('name', "%{$parameters['name']}%");
+        }
+
+        return $qb->getQuery();
+    }
+
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function findNotSoldQuery(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.type = lost')
+            ;
+    }
+
+
+    /**
+     * @return Query
+     */
+    public function findAllNotSoldQuery(): Query
+    {
+        return $this->findNotSoldQuery()
+            ->getQuery()
+            ;
+    }
+
+
 
     public function save(Announce $entity, bool $flush = false): void
     {

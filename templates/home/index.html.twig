@@ -3,6 +3,6 @@
 {% block title %}Ronron | Accueil{% endblock %}
 
 {% block body %}
-MIAOU
+    {% include 'home/_filter.html.twig' with {form: searchAnnounce} only %}
 
 {% endblock %}

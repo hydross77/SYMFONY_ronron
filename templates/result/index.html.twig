@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ronron{% endblock %}
+
+{% block body %}
+Résultat de votre rechercher
+
+             {% include 'result/_filter.html.twig' with {form: searchAnnounce2} only  %}
+
+
+            {% if announces is not empty %}
+                {% for announce in announces %}
+                    {% include 'result/_card.html.twig' with {announce: announce, user: user} only %}
+                {% endfor %}
+            {% else %}
+                Aucunes annonces
+            {% endif %}
+
+    <div class="pagination" style="float:right">
+        {{ knp_pagination_render(announces) }}
+    </div>
+
+    <br>
+    <br>
+
+{% endblock %}
