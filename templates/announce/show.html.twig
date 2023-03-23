@@ -12,7 +12,15 @@
         <div class="card-body">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Nom: {{ announce.cat.name ?? 'Non renseigné' }}</li>
-                <li class="list-group-item">Couleur: {{ announce.cat.color ?? 'Non renseigné' }}</li>
+                <li class="list-group-item">Couleur:
+                    {% if cat.color is not empty %}
+                        {% for color in cat.color %}
+                            {{ color.name }}
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Non renseigné
+                    {% endif %}</li>
                 <li class="list-group-item">Age: {{ announce.cat.age ?? 'Non renseigné' }}</li>
                 <li class="list-group-item">Race: {{ announce.cat.breed ?? 'Non renseigné' }}</li>
                 <li class="list-group-item">Tatouage: {{ announce.cat.tattoo ?? 'Non renseigné' }}</li>
@@ -29,8 +37,6 @@
             </ul>
         </div>
     </div>
-
-    {{ dump(cat.couleur) }}
 
     <h2>Commentaires</h2>
 

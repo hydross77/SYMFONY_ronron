@@ -38,8 +38,8 @@ class AnnounceController extends AbstractController
 
             $user = $this->getUser();
             // Associer l'utilisateur courant à l'annonce
-            $cat->setUser($user);
-
+            $cat->addUser($user);
+            $cat->addColor();
 
             $this->entityManager->persist($cat);
             $this->entityManager->flush();
@@ -77,6 +77,7 @@ class AnnounceController extends AbstractController
             // Associer l'utilisateur courant à l'annonce
             $announce->setUser($user);
 
+
             $this->entityManager->persist($user);
             $this->entityManager->persist($announce);
             $this->entityManager->flush();
@@ -101,6 +102,7 @@ class AnnounceController extends AbstractController
         }
 
         $cat = $announce->getCat();
+        $color = $cat->getColor();
 
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -123,6 +125,7 @@ class AnnounceController extends AbstractController
         return $this->render('announce/show.html.twig', [
             'announce' => $announce,
             'cat' => $cat,
+            'color'=>$color,
             'comment_form' => $form,
             'comments' => $comments,
         ]);
