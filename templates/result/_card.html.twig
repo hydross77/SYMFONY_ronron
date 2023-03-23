@@ -1,3 +1,6 @@
-{{ announce.description }}<br>
+{{ announce.cat.name }}<br>
+{% for color in announce.cat.color %}
+    {{ color.name }}<br>
+{% endfor %}
 {{ dump(announce) }}
 {{ announce.type }}<br><br>

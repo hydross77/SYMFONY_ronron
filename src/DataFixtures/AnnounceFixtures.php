@@ -48,7 +48,7 @@ class AnnounceFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription($faker->sentences(3, true))
                 ->setCp($faker->randomElement(['67200', '67000']))
                 ->setStreet($faker->randomElement(['Chemin du grossroethig', 'Route des romains']))
-                ->setCity('Strasbourg')
+                ->setCity($faker->randomElement(['Strasbourg', 'Lyon', 'Marseille', 'Bordeaux', 'Paris', 'Nantes', 'Nice']))
                 ->setCountry('France')
                 ->setUser($user)
                 ->setCat($cat)
