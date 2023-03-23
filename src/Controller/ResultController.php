@@ -17,37 +17,33 @@ class ResultController extends AbstractController
     {
         $query = $request->query->get('type');
         $city = $request->query->get('city');
-        $color = $request->query->get('color');
-
-        $user = $this->getUser() ?? null;
-        /*$freelances = $repository->findSearch([
-            'q' => $query,
-            'city' => $city
-        ]);*/
-        // les profils paginé
-        $announces = $paginator->paginate(
-            $repository->findSearch2([
-                'type' => $query,
-                'city' => $city,
-                'color' => $color,
-            ]),
-            $request->query->getInt('page', 1),
-            12
-        );
+        $name = $request->query->get('name');
 
         $searchAnnounce = $this->createForm(SearchForm2::class, null);
-        // crée le formulaire configuré dans le dossier FORM
         $searchAnnounce->handleRequest($request);
-        // traite les données du formulaire
-
 
         if ($searchAnnounce->isSubmitted() && $searchAnnounce->isValid()) {
-            // si le formulaire est envoyé et validé alors :
-            $request->query->remove('_token');
-            // on passe le formulaire a la fonction du repository qui est un tableau classic : FreelanceRepository.php
+            $parameters = $request->query->all();
+            $color = $searchAnnounce->get('color')->getData();
+            $parameters['color'] = is_array($color) ? array_filter($color, 'is_scalar') : [$color];
 
-            return $this->redirectToRoute('app_result', $request->query->all());
-        };
+            $announces = $paginator->paginate(
+                $repository->findSearch($parameters),
+                $request->query->getInt('page', 1),
+                12
+            );
+        } else {
+            $announces = $paginator->paginate(
+                $repository->findSearch([
+                    'type' => $query,
+                    'city' => $city,
+                    'name' => $name,
+                ]),
+                $request->query->getInt('page', 1),
+                12
+            );
+        }
+
 
         return $this->render('result/index.html.twig', [
             'announces' => $announces ?? null,
@@ -55,4 +51,5 @@ class ResultController extends AbstractController
             'searchAnnounce2' => $searchAnnounce->createView()
         ]);
     }
+
 }

@@ -32,22 +32,33 @@ class AnnounceRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('a');
         // fait une requête sur l'entité 'A' : 'ANNOUNCE'
 
-
-
         if (!empty($parameters['type'])) {
             $qb->andWhere('a.type = :type')
                 ->setParameter('type', $parameters['type']);
         }
 
-
         if (!empty($parameters['city'])) {
             $qb->andWhere('a.city = :city')
                 ->setParameter('city', $parameters['city']);
         }
+
+        if (isset($parameters['name']) && $parameters['name'] !== '') {
+            $qb->andWhere('cat.name LIKE :name')
+                ->setParameter('name', '%' . $parameters['name'] . '%');
+        }
+
+        if (!empty($parameters['color'])) {
+            $colors = array_values($parameters['color']);
+            $qb->andWhere('color.id IN (:colors)')
+                ->setParameter('colors', $colors);
+        }
+
+
         //dd($qb->getDQL());
         // requete bdd
 
-
+        $qb->leftJoin('a.cat', 'cat'); // jointure avec la table Cat
+        $qb->leftJoin('cat.color', 'color');
 
         return $qb->getQuery();
         //->getResult(); //retourne le tableau des résultats
@@ -67,13 +78,23 @@ class AnnounceRepository extends ServiceEntityRepository
                 ->setParameter('name', "%{$parameters['name']}%");
         }
 
-        if (!empty($parameters['color'])) {
-            $qb->andWhere('color.id LIKE :id')
-                ->setParameter('id', "%{$parameters['color']}%");
+        if (!empty($parameters['city'])) {
+            $qb->andWhere('a.city = :city')
+                ->setParameter('city', $parameters['city']);
         }
+
+        if (!empty($parameters['color'])) {
+            $colors = array_map(function($color) {
+                return serialize($color);
+            }, $parameters['color']);
+            $qb->andWhere('color.id IN (:colors)')
+                ->setParameter('colors', $colors);
+        }
+
 
         return $qb->getQuery();
     }
+
 
 
 

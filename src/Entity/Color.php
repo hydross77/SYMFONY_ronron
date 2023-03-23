@@ -18,8 +18,9 @@ class Color
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Cat::class, mappedBy: 'couleur')]
+    #[ORM\ManyToMany(targetEntity: Cat::class, mappedBy: 'color')]
     private Collection $cats;
+
 
     public function __construct()
     {
@@ -55,7 +56,7 @@ class Color
     {
         if (!$this->cats->contains($cat)) {
             $this->cats->add($cat);
-            $cat->addCouleur($this);
+            $cat->addColor($this);
         }
 
         return $this;
@@ -64,7 +65,7 @@ class Color
     public function removeCat(Cat $cat): self
     {
         if ($this->cats->removeElement($cat)) {
-            $cat->removeCouleur($this);
+            $cat->removeColor($this);
         }
 
         return $this;

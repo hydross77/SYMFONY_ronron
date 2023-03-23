@@ -6,6 +6,7 @@ use App\Entity\Cat;
 use App\Entity\Color;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,6 +20,20 @@ class SearchForm2 extends SearchForm
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('type', ChoiceType::class, [
+                'label' => false,
+                'required' => false,
+                'choices' => [
+                    'Perdu' => 'lost',
+                    'Retrouvé' => 'found',
+                ],
+                'placeholder' => 'Perdu/Retrouvé',
+            ])
+            ->add('name', TextType::class, [
+                'required'=>false,
+                'label' => false,
+                'attr' => ['name' => 'name'],
+            ])
             ->add('city', TextType::class, [
                 'required'=>false,
                 'label' => false,
@@ -31,9 +46,12 @@ class SearchForm2 extends SearchForm
                 'expanded' => true,
                 'multiple' => true,
                 'choice_label' => 'name',
-                'choice_value' => 'id',
+                'choice_value' => function (?Color $color) {
+                    return $color ? $color->getId() : '';
+                },
                 'placeholder' => 'Choisir une couleur',
             ]);
+
     }
 
     //configuration du formulaire
