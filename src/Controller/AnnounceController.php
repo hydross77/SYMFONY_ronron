@@ -4,12 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Announce;
 use App\Entity\Cat;
+use App\Entity\Comment;
 use App\Form\AnnounceType;
 use App\Form\CatType;
+use App\Form\CommentType;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -22,15 +26,7 @@ class AnnounceController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/announce', name: 'app_announce')]
-    public function index(): Response
-    {
-        return $this->render('announce/index.html.twig', [
-            'controller_name' => 'AnnounceController',
-        ]);
-    }
-
-    #[Route('/announce/new', name: 'app_announce_new')]
+    #[Route('/new/cat', name: 'app_new_cat')]
     public function new(Request $request, SessionInterface $session): Response
     {
         $cat = new Cat();
@@ -54,7 +50,7 @@ class AnnounceController extends AbstractController
             return $this->redirectToRoute('app_announce_create');
         }
 
-        return $this->render('announce/new.html.twig', [
+        return $this->render('announce/new_cat.html.twig', [
             'formCat' => $formCat->createView(),
         ]);
     }
@@ -84,7 +80,9 @@ class AnnounceController extends AbstractController
             $this->entityManager->persist($announce);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_announce');
+            // Rediriger vers la page de l'annonce créée
+            $announceId = $announce->getId();
+            return $this->redirectToRoute('app_announce_show', ['id' => $announceId]);
         }
 
         return $this->render('announce/create.html.twig', [
@@ -93,16 +91,48 @@ class AnnounceController extends AbstractController
     }
 
     #[Route('/announce/{id}', name: 'app_announce_show')]
-    public function show($id): Response
+    public function show($id, Request $request, CommentRepository $commentRepository): Response
     {
         $announce = $this->entityManager->getRepository(Announce::class)->find($id);
+
+        if (!$announce) {
+            throw new NotFoundHttpException("L'annonce avec l'ID $id n'existe pas.");
+        }
+
         $cat = $announce->getCat();
+
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setAnnounce($announce);
+
+            $user = $this->getUser();
+            $comment->setUser($user);
+
+            $this->entityManager->persist($comment);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_announce_show', ['id' => $announce->getId()]);
+        }
+
+        $comments = $commentRepository->findBy(['announce' => $announce], ['createdAt' => 'DESC']);
 
         return $this->render('announce/show.html.twig', [
             'announce' => $announce,
             'cat' => $cat,
+            'comment_form' => $form,
+            'comments' => $comments,
         ]);
     }
 
-
+    #[Route('/delete/{id}', name: 'app_comment_delete')]
+    public function delete(Request $request, Comment $comment): Response
+    {
+        $this->entityManager->remove($comment);
+        $this->entityManager->flush();
+        $this->addFlash('message', 'Votre commentaire a bien été supprimé');
+        return $this->redirect($request->headers->get('referer'));
+    }
 }
