@@ -31,6 +31,7 @@ class Donation
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -41,6 +42,11 @@ class Donation
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
+    }
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->date = new \DateTime();
     }
 
     public function setDate(\DateTimeInterface $date): self

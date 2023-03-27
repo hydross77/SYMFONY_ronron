@@ -6,14 +6,22 @@
     <p>Date: {{ announce.dateCat|date('d/m/Y') }}</p>
     <p>Vu la dernière fois : {{ announce.street ?? '' }}, {{ announce.cp }} {{ announce.city }}, {{ announce.country }}</p>
     Status : {% if workflow_has_marked_place(announce, 'online') %}
-    en ligne
+    En ligne
 {% elseif workflow_has_marked_place(announce, 'found') %}
-    retrouver
+    Chat retrouvé
+{% elseif workflow_has_marked_place(announce, 'archived') %}
+    Annonce Archivé
 {% endif %}
 
     {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
         <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}" class="btn btn-primary">Chat retrouvé</a>
     {% endif %}
+
+    {% if workflow_can(announce, 'to_archived') and announce.user == app.user %}
+        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}" class="btn btn-primary">Archivé l'annonce</a>
+    {% endif %}
+
+
 
     <div class="card mt-4">
         <h2 class="card-header">Information sur le chat</h2>

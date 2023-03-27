@@ -32,8 +32,6 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Announce $announce = null;
 
-
-
     #[ORM\PrePersist]
     public function prePersist(): void
     {

@@ -14,6 +14,7 @@ framework:
                 - redaction
                 - online
                 - found
+                - archived
             transitions:
                 to_online:
                     from: redaction
@@ -21,3 +22,6 @@ framework:
                 to_found:
                     from: online
                     to: found
+                to_archived:
+                    from: found
+                    to: archived
