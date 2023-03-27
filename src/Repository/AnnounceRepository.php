@@ -25,12 +25,14 @@ class AnnounceRepository extends ServiceEntityRepository
 
     /**
      * Récupère les Announces en lien avec une recherche
-     * @return Announce[]
+     * @param array $parameters
+     * @return Query
      */
-    public function findSearch(array $parameters): Query //parameters est le tableau
+    public function findSearch(array $parameters): Query
     {
         $qb = $this->createQueryBuilder('a');
-        // fait une requête sur l'entité 'A' : 'ANNOUNCE'
+        $qb->leftJoin('a.cat', 'cat');
+        $qb->leftJoin('cat.color', 'color');
 
         if (!empty($parameters['type'])) {
             $qb->andWhere('a.type = :type')
@@ -42,27 +44,36 @@ class AnnounceRepository extends ServiceEntityRepository
                 ->setParameter('city', $parameters['city']);
         }
 
-        if (isset($parameters['name']) && $parameters['name'] !== '') {
-            $qb->andWhere('cat.name LIKE :name')
-                ->setParameter('name', '%' . $parameters['name'] . '%');
+        if (!empty($parameters['breed'])) {
+            $qb->andWhere('cat.breed = :breed')
+                ->setParameter('breed', $parameters['breed']);
+        }
+
+        if (!empty($parameters['length_coat'])) {
+            $qb->andWhere('cat.lengthCoat = :lengthCoat')
+                ->setParameter('lengthCoat', $parameters['length_coat']);
+        }
+
+        if (!empty($parameters['design_coat'])) {
+            $qb->andWhere('cat.designCoat = :designCoat')
+                ->setParameter('designCoat', $parameters['design_coat']);
+        }
+
+        if (!empty($parameters['sexe'])) {
+            $qb->andWhere('cat.sexe = :sexe')
+                ->setParameter('sexe', $parameters['sexe']);
         }
 
         if (!empty($parameters['color'])) {
-            $colors = array_values($parameters['color']);
-            $qb->andWhere('color.id IN (:colors)')
+            $colors = is_array($parameters['color']) ? $parameters['color'] : [$parameters['color']];
+            $qb->andWhere($qb->expr()->in('color.id', ':colors'))
                 ->setParameter('colors', $colors);
         }
 
-
-        //dd($qb->getDQL());
-        // requete bdd
-
-        $qb->leftJoin('a.cat', 'cat'); // jointure avec la table Cat
-        $qb->leftJoin('cat.color', 'color');
-
         return $qb->getQuery();
-        //->getResult(); //retourne le tableau des résultats
     }
+
+
 
     /**
      * @throws Exception
