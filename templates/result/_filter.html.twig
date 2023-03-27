@@ -1,6 +1,9 @@
-{{ form_start(form) }}
+{{ form_start(form, {'method': 'POST'}) }}
 <div class="btnSearch2">{{ form_row(form.type) }}</div>
-<div class="btnSearch2">Name {{ form_row(form.name) }}</div>
+<div class="btnSearch2">Sexe {{ form_row(form.sexe) }}</div>
+<div class="btnSearch2">Poil {{ form_row(form.length_coat) }}</div>
+<div class="btnSearch2">Robe {{ form_row(form.design_coat) }}</div>
+<div class="btnSearch2">Race {{ form_row(form.breed) }}</div>
 <div class="btnSearch2">Ville {{ form_row(form.city) }}</div>
 <div class="btnSearch2">Couleur {{ form_row(form.color) }}</div>
 <button class="btnSearch2" type="submit">Rechercher</button>

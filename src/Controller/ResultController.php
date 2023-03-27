@@ -15,9 +15,12 @@ class ResultController extends AbstractController
     #[Route('/search/announces', name: 'app_result')]
     public function index(Request $request, AnnounceRepository $repository, PaginatorInterface $paginator): Response
     {
-        $query = $request->query->get('type');
-        $city = $request->query->get('city');
-        $name = $request->query->get('name');
+        $query = $request->request->get('type');
+        $city = $request->request->get('city');
+        $breed = $request->request->get('breed');
+        $length = $request->request->get('length_coat');
+        $design = $request->request->get('design_coat');
+        $sexe = $request->request->get('sexe');
 
         $searchAnnounce = $this->createForm(SearchForm2::class, null);
         $searchAnnounce->handleRequest($request);
@@ -27,17 +30,22 @@ class ResultController extends AbstractController
             $color = $searchAnnounce->get('color')->getData();
             $parameters['color'] = is_array($color) ? array_filter($color, 'is_scalar') : [$color];
 
+
             $announces = $paginator->paginate(
                 $repository->findSearch($parameters),
                 $request->query->getInt('page', 1),
                 12
             );
+
         } else {
             $announces = $paginator->paginate(
                 $repository->findSearch([
                     'type' => $query,
                     'city' => $city,
-                    'name' => $name,
+                    'breed' => $breed,
+                    'sexe' => $sexe,
+                    'length_coat' => $length,
+                    'design_coat' => $design,
                 ]),
                 $request->query->getInt('page', 1),
                 12
