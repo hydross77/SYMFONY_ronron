@@ -63,6 +63,9 @@
                 {% if comment.user == app.user %}
                     <a href="{{ path("app_comment_delete", {'id':comment.id}) }}">Supprimer</a>
                 {% endif %}
+                {% if app.user %}
+                    <a href="#" class="report-link" data-comment-id="{{ comment.id }}">Signaler</a>
+                {% endif %}
             </p>
         {% endfor %}
 
@@ -82,4 +85,5 @@
         {% else %}
         Veuillez <a href="{{ path('app_login') }}"> vous connecter</a> pour commenter
     {% endif %}
+
 {% endblock %}
