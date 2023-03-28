@@ -1,0 +1,161 @@
+* {
+    font-family: "Raleway", sans-serif;
+}
+
+/* --- TYPOGRAPHIE --- */
+
+/*
+Beige : #D2B48C;
+Vert : #C6D18C;
+Noir : #2F2F2F;
+Typo 1 : font-family: 'Lobster Two', cursive;
+Typo 2 : font-family: 'Raleway', sans-serif;
+ */
+
+/* --- FIN TYPOGRAPHIE --- */
+
+/* --- BTN --- */
+
+.btn1 {
+    color: #2F2F2F;
+    text-decoration: none;
+}
+
+.btn1:hover {
+    font-weight: bold;
+    color: #2F2F2F;
+}
+
+.btn2 {
+    color: #D2B48C;
+    text-decoration: none;
+}
+
+.btn2:hover {
+    font-weight: bold;
+    color: #D2B48C;
+}
+
+.btn3 {
+    color: #C6D18C;
+    text-decoration: none;
+}
+
+.btn3:hover {
+    font-weight: bold;
+    color: #C6D18C;
+}
+
+.btn7{
+    text-decoration: none;
+    color: #2F2F2F;
+    font-weight: bold;
+    background-color: #D2B48C;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.btn7:hover {
+    color: #2F2F2F;
+    background-color: rgba(210, 180, 140, 0.77);
+}
+
+/* --- FIN BTN --- */
+
+/* --- NAVBAR --- */
+
+@media screen and (max-width: 768px) {
+    #navbar {
+        display: none;
+    }
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    color: #2F2F2F;
+    align-items: center;
+    padding: 10px;
+}
+
+.ronron{
+    font-family: 'Lobster Two', cursive;
+    font-size: xxx-large;
+    font-weight: bold;
+}
+
+nav .navbar ul {
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+    text-decoration: none;
+}
+
+/* --- FIN NAVBAR --- */
+
+/* --- MENU BURGER --- */
+
+@media screen and (min-width: 768px) {
+    #openBtn {
+        display: none;
+    }
+}
+
+/* Sidenav menu */
+.sidenav {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: -250px;
+    background-color: #e8e8e8;
+    padding-top: 60px;
+    transition: left 0.5s ease;
+}
+
+/* Sidenav menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #111;
+}
+
+.sidenav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Active class */
+.sidenav.active {
+    left: 0;
+}
+
+/* Close btn */
+.sidenav .close {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+}
+
+/* Icône burger */
+.burger-icon span {
+    display: block;
+    width: 35px;
+    height: 5px;
+    background-color: black;
+    margin: 6px 0;
+}
+
+/* --- FIN MENU BURGER --- */
+
