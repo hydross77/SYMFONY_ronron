@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Annonce de chat {{ announce.type }}</h1>
+    <h1>{{ announce.cat.name }} | {{ announce.type }} </h1>
+
     <p>Description : {{ announce.description }}</p>
     <p>Date: {{ announce.dateCat|date('d/m/Y') }}</p>
-    <p>Vu la dernière fois : {{ announce.street ?? '' }}, {{ announce.cp }} {{ announce.city }}, {{ announce.country }}</p>
+    <p>Vu la dernière fois : {{ announce.street ?? '' }}, {{ announce.cp }} {{ announce.city }}
+        , {{ announce.country }}</p>
     Status : {% if workflow_has_marked_place(announce, 'online') %}
     En ligne
 {% elseif workflow_has_marked_place(announce, 'found') %}
@@ -14,14 +16,14 @@
 {% endif %}
 
     {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
-        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}" class="btn btn-primary">Chat retrouvé</a>
+        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}"
+           class="btn btn-primary">Chat retrouvé</a>
     {% endif %}
 
     {% if workflow_can(announce, 'to_archived') and announce.user == app.user %}
-        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}" class="btn btn-primary">Archivé l'annonce</a>
+        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}"
+           class="btn btn-primary">Archivé l'annonce</a>
     {% endif %}
-
-
 
     <div class="card mt-4">
         <h2 class="card-header">Information sur le chat</h2>
@@ -59,20 +61,44 @@
     {% if comments %}
 
         {% for comment in comments %}
-            <p>{{ comment.content }} de {{ comment.user.pseudo }} le {{ comment.createdAt | date('d-m-Y') }}
+            <p>{{ comment.content }} de {{ comment.user.pseudo }} le {{ comment.createdAt | date('d-m-Y') }}</p>
                 {% if comment.user == app.user %}
                     <a href="{{ path("app_comment_delete", {'id':comment.id}) }}">Supprimer</a>
                 {% endif %}
                 {% if app.user %}
-                    <a href="#" class="report-link" data-comment-id="{{ comment.id }}">Signaler</a>
-                {% endif %}
-            </p>
-        {% endfor %}
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Signaler
+                    </button>
 
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Signaler un commentaire</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Commentaire : {{ comment.content }}</p>
+                                    <hr>
+                                    {{ form_start(report_form, {'attr': {'novalidate': 'novalidate', 'id': 'report-form'}}) }}
+                                    {{ form_end(report_form) }}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    <button type="submit" class="btn btn-primary" form="report-form">Signaler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+
+        {% endfor %}
 
     {% else %}
 
-    <p> Aucun commentaire pour le moment</p>
+        <p> Aucun commentaire pour le moment</p>
 
     {% endif %}
 
@@ -82,8 +108,40 @@
         {{ form_start(comment_form) }}
         <button type="submit">Envoyer</button>
         {{ form_end(comment_form) }}
-        {% else %}
+
+    {% else %}
+
         Veuillez <a href="{{ path('app_login') }}"> vous connecter</a> pour commenter
+
     {% endif %}
+
+    {% if app.user %}
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reportModal">
+            Signaler cette annonce
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel">Signaler cette annonce</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_start(report_announce, {'attr': {'id': 'report-announce'}}) }}
+                        {{ form_row(report_announce.reason) }}
+                        {{ form_row(report_announce.details) }}
+                        {{ form_end(report_announce) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" form="report-announce" class="btn btn-danger">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 
 {% endblock %}
