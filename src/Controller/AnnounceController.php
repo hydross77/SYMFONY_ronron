@@ -8,6 +8,8 @@ use App\Entity\Comment;
 use App\Form\AnnounceType;
 use App\Form\CatType;
 use App\Form\CommentType;
+use App\Form\ReportAnnounceType;
+use App\Form\ReportType;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Workflow\Exception\LogicException;
@@ -36,6 +40,7 @@ class AnnounceController extends AbstractController
     public function new(Request $request, SessionInterface $session): Response
     {
         $cat = new Cat();
+
         $formCat = $this->createForm(CatType::class, $cat);
         $formCat->handleRequest($request);
 
@@ -43,6 +48,7 @@ class AnnounceController extends AbstractController
             $cat = $formCat->getData();
 
             $user = $this->getUser();
+
             // Associer l'utilisateur courant à l'annonce
             $cat->addUser($user);
 
@@ -68,6 +74,7 @@ class AnnounceController extends AbstractController
         $user = $this->getUser();
 
         $announce = new Announce();
+
         $announce->setUser($user);
         $announce->setCat($this->entityManager->getRepository(Cat::class)->find($catId));
 
@@ -84,41 +91,45 @@ class AnnounceController extends AbstractController
 
             $this->entityManager->persist($user);
 
-            try{
+            try {
                 $this->announceWorkflow->apply($announce, 'to_online');
-            }catch(\LogicException $exception){
+            } catch (\LogicException $exception) {
 
             }
 
             $this->entityManager->persist($announce);
             $this->entityManager->flush();
 
-            // Redirect to the page of the created announcement
+            // Redirection vers l'annonce crée
             $announceId = $announce->getId();
+
             return $this->redirectToRoute('app_announce_show', ['id' => $announceId]);
         }
-
         return $this->render('announce/create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/announce/{id}', name: 'app_announce_show')]
-    public function show($id, Request $request, CommentRepository $commentRepository): Response
+    public function show($id, Request $request, CommentRepository $commentRepository, MailerInterface $mailer): Response
     {
         $announce = $this->entityManager->getRepository(Announce::class)->find($id);
 
         if (!$announce) {
             throw new NotFoundHttpException("L'annonce avec l'ID $id n'existe pas.");
         }
+        $comments = $announce->getComments(['createdAt' => 'DESC']);
 
         $cat = $announce->getCat();
         $color = $cat->getColor();
 
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
+        $report = $this->createForm(ReportType::class);
+        $reportAnnounce = $this->createForm(ReportAnnounceType::class);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setAnnounce($announce);
 
@@ -131,16 +142,71 @@ class AnnounceController extends AbstractController
             return $this->redirectToRoute('app_announce_show', ['id' => $announce->getId()]);
         }
 
-        $comments = $commentRepository->findBy(['announce' => $announce], ['createdAt' => 'DESC']);
+        $report->handleRequest($request);
+
+        if ($report->isSubmitted() && $report->isValid()) {
+            $data = $report->getData();
+            $comment = $this->entityManager->getRepository(Comment::class)->find($id);
+            $commentId = $comment->getId();
+            $reason = $data['reason'];
+            $content = $data['content'];
+
+            $user = $this->getUser();
+
+
+            // Envoyer un email de signalement à l'administrateur
+            $email = (new Email())
+                ->from($user->getEmail())
+                ->to('contactez.ronron@gmail.com')
+                ->subject('Signalement de commentaire')
+                ->html(sprintf('Annonce ID: %d<br>Commentaire ID: %d<br>Raison: %s<br>Contenu: %s', $announce->getId(), $commentId, $reason, $content));
+            $mailer->send($email);
+
+            $this->addFlash('message', 'Le commentaire a été signalé avec succès. Nous le vérifierons dans les plus brefs délais.');
+
+            return $this->redirectToRoute('app_announce_show', ['id' => $announce->getId()]);
+        }
+
+        $reportAnnounce->handleRequest($request);
+
+        if ($reportAnnounce->isSubmitted() && $reportAnnounce->isValid()) {
+
+            // Envoyer la notification à l'administrateur
+            $reason = $reportAnnounce->get('reason')->getData();
+            $details = $reportAnnounce->get('details')->getData();
+
+            $announcement = $this->entityManager->getRepository(Announce::class)->find($id);
+
+            if (!$announcement) {
+                throw $this->createNotFoundException('Annonce non trouvée');
+            }
+            $user = $this->getUser();
+            // Envoyer un email de signalement à l'administrateur
+            $email = (new Email())
+                ->from($user->getEmail())
+                ->to('contactez.ronron@gmail.com')
+                ->subject('Signalement d\'une annonce')
+                ->html(sprintf('Annonce ID: %d<br><br><br>Raison: %s<br>Contenu: %s', $announcement->getId(), $reason, $details));
+
+            $mailer->send($email);
+
+            $this->addFlash('message', 'Annonce signalé');
+
+            return $this->redirectToRoute('app_announce_show', ['id' => $announce->getId()]);
+        }
 
         return $this->render('announce/show.html.twig', [
             'announce' => $announce,
             'cat' => $cat,
-            'color'=>$color,
-            'comment_form' => $form,
+            'color' => $color,
+            'comment_form' => $form->createView(),
+            'report_form' => $report->createView(),
+            'report_announce'=>$reportAnnounce->createView(),
             'comments' => $comments,
         ]);
     }
+
+
 
     #[Route('/announce/{id}/change_state/{state}', name: 'app_announce_change_state')]
     public function changeState(Announce $announce, string $state): Response
@@ -176,7 +242,9 @@ class AnnounceController extends AbstractController
     {
         $this->entityManager->remove($comment);
         $this->entityManager->flush();
+
         $this->addFlash('message', 'Votre commentaire a bien été supprimé');
+
         return $this->redirect($request->headers->get('referer'));
     }
 }
