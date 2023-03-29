@@ -7,49 +7,60 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email',EmailType::class,[
-                "label"=>"Entrez votre e-mail"
-            ])
+            ->add('email', EmailType::class, [
+                'label' => false,
+            'attr' => [
+                'placeholder' => 'Entrez votre e-mail'
+            ]
+        ])
             ->add('pseudo',TextType::class,[
-                "label"=>"Entrez votre pseudo"
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Entrez un pseudo'
+                ]
             ])
             ->add('agreeTerms', CheckboxType::class, [
+                'label' => 'En cochant cette case, j\'accepte les conditions d\'utilisation générale du site.',
                 'mapped' => false,
-                "label"=>"Accepter les CGU",
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'Accepter les CGU',
+                        'message' => 'Acceptez les CGU',
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
+            ->add('password', RepeatedType::class, [
+                'label' => false,
+                'type' => PasswordType::class,
+                'mapped' => true,
+                'first_options' => ['label' => 'Mot de passe : ', 'attr' => ['class' => 'input-full'], 'constraints' => [
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                        'match' => true,
+                        'message' => 'Le mot de passe doit contenir : minimum 8 caractère, un nombre, une minuscule, une majuscule et un caractère spécial',
                     ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                ]],
+
+                'second_options' => ['label' => 'Répétez le mot de passe : ', 'attr' => ['class' => 'input-full'], 'constraints' => [
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                        'match' => true,
+                        'message' => 'Le mot de passe doit contenir : minimum 8 caractère, un nombre, une minuscule, une majuscule et un caractère spécial',
                     ]),
-                ],
+                ]],
             ])
         ;
     }

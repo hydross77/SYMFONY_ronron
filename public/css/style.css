@@ -6,7 +6,7 @@
 
 /*
 Beige : #D2B48C;
-Vert : #C6D18C;
+Bleu : #009DDC;
 Noir : #2F2F2F;
 Typo 1 : font-family: 'Lobster Two', cursive;
 Typo 2 : font-family: 'Raleway', sans-serif;
@@ -60,6 +60,35 @@ Typo 2 : font-family: 'Raleway', sans-serif;
     background-color: rgba(210, 180, 140, 0.77);
 }
 
+.btn8{
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+    background-color: #009DDC;
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+}
+
+.btn8:hover {
+    color: #ffffff;
+    background-color: rgba(0, 157, 220, 0.8);
+}
+
+.btnSoumission{
+    background-color: #009DDC;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.btnSoumission:hover{
+    background-color: rgba(0, 157, 220, 0.81);
+}
+
 /* --- FIN BTN --- */
 
 /* --- NAVBAR --- */
@@ -77,6 +106,7 @@ nav {
     color: #2F2F2F;
     align-items: center;
     padding: 10px;
+    margin-bottom: 50px;
 }
 
 .ronron{
@@ -158,4 +188,429 @@ nav .navbar ul {
 }
 
 /* --- FIN MENU BURGER --- */
+
+/* --- FOOTER --- */
+
+.site-footer
+{
+    background-color:#D2B48C;
+    padding:45px 0 20px;
+    font-size:15px;
+    line-height:24px;
+    margin-top: 50px;
+}
+.site-footer hr
+{
+    border-top-color:#bbb;
+    opacity:0.5
+}
+.site-footer hr.small
+{
+    margin:20px 0
+}
+.site-footer h6
+{
+  font-weight: bold;
+    font-size:16px;
+    text-transform:uppercase;
+    margin-top:5px;
+    letter-spacing:2px
+}
+.site-footer a
+{
+    color:black;
+}
+.site-footer a:hover
+{
+    color:black;
+    text-decoration:none;
+}
+.footer-links
+{
+    padding-left:0;
+    list-style:none
+}
+.footer-links li
+{
+    display:block
+}
+.footer-links a
+{
+    color:black;
+}
+.footer-links a:active,.footer-links a:focus,.footer-links a:hover
+{
+    color:black;
+    text-decoration:none;
+}
+.footer-links.inline li
+{
+    display:inline-block
+}
+.site-footer .social-icons
+{
+    text-align:right
+}
+.site-footer .social-icons a
+{
+    width:40px;
+    height:40px;
+    line-height:40px;
+    margin-left:6px;
+    margin-right:0;
+    border-radius:100%;
+    background-color:#33353d
+}
+.copyright-text
+{
+    margin:0
+}
+@media (max-width:991px)
+{
+    .site-footer [class^=col-]
+    {
+        margin-bottom:30px
+    }
+}
+@media (max-width:767px)
+{
+    .site-footer
+    {
+        padding-bottom:0
+    }
+    .site-footer .copyright-text,.site-footer .social-icons
+    {
+        text-align:center
+    }
+}
+.social-icons
+{
+    padding-left:0;
+    margin-bottom:0;
+    list-style:none
+}
+.social-icons li
+{
+    display:inline-block;
+    margin-bottom:4px
+}
+.social-icons li.title
+{
+    margin-right:15px;
+    text-transform:uppercase;
+    color:white;
+    font-weight:700;
+    font-size:13px
+}
+.social-icons a{
+    background-color:#eceeef;
+    color:#818a91;
+    font-size:16px;
+    display:inline-block;
+    line-height:44px;
+    width:44px;
+    height:44px;
+    text-align:center;
+    margin-right:8px;
+    border-radius:100%;
+    -webkit-transition:all .2s linear;
+    -o-transition:all .2s linear;
+    transition:all .2s linear
+}
+.social-icons a:active,.social-icons a:focus,.social-icons a:hover
+{
+    color:#fff;
+    background-color:#29aafe
+}
+.social-icons.size-sm a
+{
+    line-height:34px;
+    height:34px;
+    width:34px;
+    font-size:14px
+}
+.social-icons a.facebook:hover
+{
+    background-color:#3b5998
+}
+.social-icons a.twitter:hover
+{
+    background-color:#00aced
+}
+.social-icons a.linkedin:hover
+{
+    background-color:#007bb6
+}
+.social-icons a.dribbble:hover
+{
+    background-color:#ea4c89
+}
+@media (max-width:767px)
+{
+    .social-icons li.title
+    {
+        display:block;
+        margin-right:0;
+        font-weight:600
+    }
+}
+
+/* --- FIN FOOTER --- */
+
+/* --- PAGE CONTACT --- */
+.contact {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    width: 70%;
+    margin: auto;
+    padding: 20px;
+}
+
+/* --- FIN PAGE CONTACT --- */
+
+/* --- PAGE CGV --- */
+
+.cgv {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.cgv h2, h3 {
+    color: #009DDC;
+    text-align: center;
+}
+
+.cgv p {
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.cgv h3 {
+    margin-top: 30px;
+}
+
+/* --- FIN PAGE CGV --- */
+
+/* --- LOGIN AND REGISTER --- */
+
+
+.rightSide .container {
+    width: 350px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 30%;
+}
+
+.rightSide{
+    width: 350px;
+    position: absolute;
+    transform: translate(-50%, -40%);
+    left: 50%;
+    top: 50%;
+}
+.cat {
+    background-color: #D2B48C;
+    height: 65px;
+    width: 80px;
+    border-radius: 0 80px 80px 0;
+    position: absolute;
+    bottom: 60px;
+    right: 50px;
+}
+.ear {
+    height: 15px;
+    width: 15px;
+    background-color: #D2B48C;
+    position: absolute;
+    bottom: 64px;
+    left: 8px;
+    border-radius: 20px 0 0 0;
+    box-shadow: 25px 0 #D2B48C;
+}
+.eye,
+.eye:before {
+    height: 7px;
+    width: 10px;
+    border: 2px solid #2c2c2c;
+    position: absolute;
+    border-radius: 0 0 15px 15px;
+    border-top: none;
+}
+.eye {
+    top: 18px;
+    left: 15px;
+}
+.eye:before {
+    content: "";
+    left: 30px;
+}
+.nose {
+    background-color: #ffffff;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    position: absolute;
+    top: 32px;
+    left: 25px;
+    box-shadow: 12px 0 #ffffff;
+}
+.nose:before {
+    content: "";
+    width: 12px;
+    height: 8px;
+    position: absolute;
+    background-color: #ffffff;
+    left: 6px;
+}
+.nose:after {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-top: 8px solid #D2B48C;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    bottom: 7px;
+    left: 6px;
+}
+.mouth {
+    background-color: #2c2c2c;
+    height: 15px;
+    width: 17px;
+    position: absolute;
+    border-radius: 0 0 5px 5px;
+    top: 38px;
+    left: 27px;
+    animation: mouth-move 2s infinite;
+    transform-origin: top;
+}
+@keyframes mouth-move {
+    50% {
+        transform: scaleY(0.7);
+    }
+}
+.body {
+    background-color: #D2B48C;
+    height: 90px;
+    width: 140px;
+    position: absolute;
+    right: 65px;
+    bottom: 0;
+    border-radius: 60px 60px 0 0;
+    animation: sleep 2s infinite;
+    transform-origin: bottom right;
+}
+@keyframes sleep {
+    50% {
+        transform: scale(0.9, 1.05);
+    }
+}
+.tail {
+    background-color: #D2B48C;
+    height: 20px;
+    width: 100px;
+    position: absolute;
+    right: 150px;
+    bottom: 0;
+    border-radius: 20px 0 0 20px;
+}
+.body:before {
+    content: "";
+    position: absolute;
+    background-color: #ffffff;
+    height: 12px;
+    width: 30px;
+    border-radius: 6px;
+    bottom: 0;
+    left: 22px;
+    box-shadow: 45px 0 #ffffff;
+}
+.bubble {
+    height: 20px;
+    width: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+    position: absolute;
+    left: 65px;
+    top: 20px;
+    border-radius: 50px 50px 50px 5px;
+    animation: bubble-scale 2s infinite;
+}
+@keyframes bubble-scale {
+    50% {
+        transform: scale(1.6);
+    }
+}
+.shadow {
+    height: 10px;
+    width: 240px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    position: absolute;
+    bottom: 52px;
+    left: 70px;
+    animation: shadow 2s infinite;
+}
+@keyframes shadow {
+    50% {
+        transform: scaleX(0.7);
+    }
+}
+
+#login-page {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    margin-left: 70vh;
+    bottom: 0;
+}
+#login-page .textSide {
+    display: flex;
+    align-items: center;
+    height: 50vh;
+    justify-content: center;
+}
+
+#login-page .rightSide{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 50vh;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    #login-page {
+        flex-direction: row;
+    }
+
+    #login-page .textSide {
+        height: 100%;
+        width: 100%;
+    }
+
+    #login-page .rightSide{
+        flex-direction: column;
+        gap: 20px;
+        height: 100%;
+        width: 50%;
+    }
+    #login-page .rightSide .input-space{
+        width: 40%;
+    }
+    .form-control{
+        height: 60px;
+    }
+}
+
+#parIci{
+    color: #000000;
+    text-decoration: none;
+}
+
+
 

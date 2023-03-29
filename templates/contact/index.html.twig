@@ -1,28 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ronron | Contacte{% endblock %}
+{% block title %}Ronron | Contact{% endblock %}
 
 {% block body %}
+    <div class="contact">
 
-            <h2> Contactez nous </h2>
+        {{ form_start(form) }}
+        <div>
+            {{ form_widget(form.email) }}<br>
+        </div>
+        <div>
+            {{ form_widget(form.objet) }}<br>
+        </div>
+        <div>
+            {{ form_widget(form.message) }}<br>
+        </div>
 
-            {{ form_start(form) }}
-            <div>
-                {{ form_label(form.email) }}<br>
-                {{ form_widget(form.email) }}
-            </div>
-            <div>
-                {{ form_label(form.objet) }}<br>
-                {{ form_widget(form.objet) }}
-            </div>
-            <div>
-                {{ form_label(form.message) }}<br>
-                {{ form_widget(form.message) }}
-            </div>
-
-            <div>
-                <button type="submit">Envoyer</button>
-            </div>
-            {{ form_end(form) }}
+        <div>
+            <button class="btnSoumission">Envoyer</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
 
 {% endblock %}
