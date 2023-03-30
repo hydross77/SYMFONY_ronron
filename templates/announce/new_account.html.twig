@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ronron | Déposer une annonce{% endblock %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+        <h1 class="text-center mb-3">Informations utilisateur</h1>
+
+        {{ form_start(formRegister, {'attr': {'id': 'formRegister'}}) }}
+
+        {{ form_label(formRegister.email) }}
+        {{ form_widget(formRegister.email) }}
+        {{ form_errors(formRegister.email) }}
+
+        {{ form_label(formRegister.pseudo) }}
+        {{ form_widget(formRegister.pseudo) }}
+        {{ form_errors(formRegister.pseudo) }}
+
+        {{ form_label(formRegister.password.first) }}
+        {{ form_widget(formRegister.password.first) }}
+        {{ form_errors(formRegister.password.first) }}
+
+        {{ form_label(formRegister.password.second) }}
+        {{ form_widget(formRegister.password.second) }}
+        {{ form_errors(formRegister.password.second) }}
+
+        {{ form_label(formRegister.agreeTerms) }}
+        {{ form_widget(formRegister.agreeTerms) }}
+        {{ form_errors(formRegister.agreeTerms) }}
+
+        <div class="text-center mt-3">
+            <button class="btn btn-success" type="submit">Suivant</button>
+        </div>
+
+        {{ form_end(formRegister) }}
+
+    </div>
+
+{% endblock %}

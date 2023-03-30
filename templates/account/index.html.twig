@@ -1,25 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccountController!{% endblock %}
+{% block title %}Ronron | Mon compte{% endblock %}
 
 {% block body %}
-<h1 class="text-center">Bienvenu sur votre compte  {{ app.user.pseudo }} ! </h1>
-    <p class="text-center">Ici vous pouvez modifier toutes les informations relatives à votre compte ou <a href="{{ path('change_password') }}">
-            Modifier mon mot de passe</a>.</p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card my-5">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-5">Bienvenue sur votre compte, {{ app.user.pseudo }} !</h1>
+                        <p class="card-text text-center mb-5">Ici vous pouvez modifier toutes les informations relatives à votre compte ou <a href="{{ path('change_password') }}">modifier votre mot de passe</a>.</p>
 
+                        {{ form_start(formEdit) }}
+                        <div class="form-group mb-4">
+                            {{ form_row(formEdit.email, {'attr': {'class': 'form-control', 'placeholder': 'Adresse email'}}) }}
+                            {{ form_errors(formEdit.email) }}
+                        </div>
+                        <div class="form-group mb-4">
+                            {{ form_row(formEdit.pseudo, {'attr': {'class': 'form-control', 'placeholder': 'Pseudo'}}) }}
+                            {{ form_errors(formEdit.pseudo) }}
+                        </div>
+                        <div class="d-grid gap-2 mt-5">
+                            <button class="btn btn-primary" type="submit">Modifier mes informations</button>
+                        </div>
+                        {{ form_end(formEdit) }}
 
+                        <hr>
 
-    {{ form_start(formEdit) }}
-    {{ form_row(formEdit.email) }}
-    {{ form_errors(formEdit.email) }}
-
-    {{ form_row(formEdit.pseudo) }}
-    {{ form_errors(formEdit.pseudo) }}
-
-
-    <button type="submit">Modifier mes informations</button>
-
-    {{ form_end(formEdit) }}
-
-    <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ?')" href="{{ path('delete_account') }}"> Supprimer mon compte</a>
+                        <div class="text-center mt-5">
+                            <a class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ?')" href="{{ path('delete_account') }}">Supprimer mon compte</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

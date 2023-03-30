@@ -1,147 +1,202 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>{{ announce.cat.name }} | {{ announce.type }} </h1>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">{{ announce.cat.name }} | {{ announce.type }}</h1>
+                        <p class="card-text">{{ announce.description }}</p>
+                        <p class="card-text">Vu la dernière fois : {{ announce.street ?? '' }}
+                            , {{ announce.cp }} {{ announce.city }}, {{ announce.country }}</p>
+                        <p class="card-text">Status :
+                            {% if workflow_has_marked_place(announce, 'online') %}
+                                <span class="badge bg-success">En ligne</span>
+                            {% elseif workflow_has_marked_place(announce, 'found') %}
+                                <span class="badge bg-warning">Chat retrouvé</span>
+                            {% elseif workflow_has_marked_place(announce, 'archived') %}
+                                <span class="badge bg-secondary">Annonce archivée</span>
+                            {% endif %}
+                        </p>
+                        {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
+                            <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}"
+                               class="btn btn-warning">Chat retrouvé</a>
+                        {% endif %}
+                        {% if workflow_can(announce, 'to_archived') and announce.user == app.user %}
+                            <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}"
+                               class="btn btn-secondary">Archiver l'annonce</a>
+                        {% endif %}
+                    </div>
+                </div>
 
-    <p>Description : {{ announce.description }}</p>
-    <p>Date: {{ announce.dateCat|date('d/m/Y') }}</p>
-    <p>Vu la dernière fois : {{ announce.street ?? '' }}, {{ announce.cp }} {{ announce.city }}
-        , {{ announce.country }}</p>
-    Status : {% if workflow_has_marked_place(announce, 'online') %}
-    En ligne
-{% elseif workflow_has_marked_place(announce, 'found') %}
-    Chat retrouvé
-{% elseif workflow_has_marked_place(announce, 'archived') %}
-    Annonce Archivé
-{% endif %}
+                <div class="card mt-4">
+                    <h2 class="card-header">Information sur le chat</h2>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Nom
+                                    :</strong> {{ announce.cat.name ?? 'Non renseigné' }}</li>
+                            <li class="list-group-item"><strong>Couleur :</strong>
+                                {% if cat.color is not empty %}
+                                    {% for color in cat.color %}
+                                        {{ color.name }}
+                                        {% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    Non renseigné
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item"><strong>Age :</strong> {{ announce.cat.age ?? 'Non renseigné' }}
+                            </li>
+                            <li class="list-group-item"><strong>Race
+                                    :</strong> {{ announce.cat.breed ?? 'Non renseigné' }}</li>
+                            <li class="list-group-item"><strong>Tatouage
+                                    :</strong> {{ announce.cat.tattoo ?? 'Non renseigné' }}</li>
+                            <li class="list-group-item"><strong>Stérélisé
+                                    :</strong> {{ announce.cat.sterelized ?? 'Non renseigné' }}</li>
+                            <li class="list-group-item">
+                                <strong>Pelage :</strong>
+                                <ul>
+                                    <li><strong>Style :</strong> {{ announce.cat.designCoat ?? 'Non renseigné' }}</li>
+                                    <li><strong>Longueur :</strong> {{ announce.cat.lengthCoat ?? 'Non renseigné' }}
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="list-group-item"><strong>Sexe
+                                    :</strong> {{ announce.cat.sexe ?? 'Non renseigné' }}</li>
+                            <li class="list-group-item"><strong>Puce
+                                    :</strong> {{ announce.cat.chip ?? 'Non renseigné' }}</li>
+                        </ul>
+                    </div>
+                </div>
 
-    {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
-        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}"
-           class="btn btn-primary">Chat retrouvé</a>
-    {% endif %}
-
-    {% if workflow_can(announce, 'to_archived') and announce.user == app.user %}
-        <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}"
-           class="btn btn-primary">Archivé l'annonce</a>
-    {% endif %}
-
-    <div class="card mt-4">
-        <h2 class="card-header">Information sur le chat</h2>
-        <div class="card-body">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Nom: {{ announce.cat.name ?? 'Non renseigné' }}</li>
-                <li class="list-group-item">Couleur:
-                    {% if cat.color is not empty %}
-                        {% for color in cat.color %}
-                            {{ color.name }}
-                            {% if not loop.last %}, {% endif %}
+                <div class="mt-4">
+                    <h2>Commentaires</h2>
+                    {% if comments %}
+                        {% for comment in comments %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <p class="card-text">{{ comment.content }}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">Posté par {{ comment.user.pseudo }}
+                                        le {{ comment.createdAt | date('d-m-Y') }}</small>
+                                    {% if comment.user == app.user %}
+                                        <a href="{{ path("app_comment_delete", {'id':comment.id}) }}"
+                                           class="btn btn-danger btn-sm float-end">Supprimer</a>
+                                    {% endif %}
+                                    {% if app.user %}
+                                        <button type="button" class="btn btn-outline-danger btn-sm float-end me-2"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#reportCommentModal{{ comment.id }}">
+                                            Signaler
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="reportCommentModal{{ comment.id }}" tabindex="-1"
+                                             aria-labelledby="reportCommentModalLabel{{ comment.id }}"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="reportCommentModalLabel{{ comment.id }}">Signaler ce
+                                                            commentaire</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Commentaire : {{ comment.content }}</p>
+                                                        <hr>
+                                                        {{ form_start(report_form, {'attr': {'id': 'report-comment-' ~ comment.id}}) }}
+                                                        {{ form_end(report_form) }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Annuler
+                                                        </button>
+                                                        <button type="submit" form="report-comment-{{ comment.id }}"
+                                                                class="btn btn-danger">Envoyer
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
                         {% endfor %}
                     {% else %}
-                        Non renseigné
-                    {% endif %}</li>
-                <li class="list-group-item">Age: {{ announce.cat.age ?? 'Non renseigné' }}</li>
-                <li class="list-group-item">Race: {{ announce.cat.breed ?? 'Non renseigné' }}</li>
-                <li class="list-group-item">Tatouage: {{ announce.cat.tattoo ?? 'Non renseigné' }}</li>
-                <li class="list-group-item">Stérélisé: {{ announce.cat.sterelized ?? 'Non renseigné' }}</li>
-                <li class="list-group-item">
-                    <strong>Pelage:</strong>
-                    <ul>
-                        <li>Style: {{ announce.cat.designCoat ?? 'Non renseigné' }}</li>
-                        <li>Longueur: {{ announce.cat.lengthCoat ?? 'Non renseigné' }}</li>
-                    </ul>
-                </li>
-                <li class="list-group-item">Sexe: {{ announce.cat.sexe ?? 'Non renseigné' }}</li>
-                <li class="list-group-item">Puce: {{ announce.cat.chip ?? 'Non renseigné' }}</li>
-            </ul>
-        </div>
-    </div>
+                        <p>Aucun commentaire pour le moment.</p>
+                    {% endif %}
 
-    <h2>Commentaires</h2>
+                    {% if app.user %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h3>Ajouter un commentaire</h3>
+                                {{ form_start(comment_form) }}
+                                {{ form_row(comment_form.content, {'attr': {'class': 'form-control', 'placeholder': 'Votre commentaire...'}}) }}
+                                <button type="submit" class="btn btn-primary mt-2">Envoyer</button>
+                                {{ form_end(comment_form) }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>Vous devez <a href="{{ path('app_login') }}">vous connecter</a> pour poster un commentaire.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
 
-    {% if comments %}
-
-        {% for comment in comments %}
-            <p>{{ comment.content }} de {{ comment.user.pseudo }} le {{ comment.createdAt | date('d-m-Y') }}</p>
-                {% if comment.user == app.user %}
-                    <a href="{{ path("app_comment_delete", {'id':comment.id}) }}">Supprimer</a>
-                {% endif %}
+            <div class="col-md-4">
                 {% if app.user %}
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Signaler
-                    </button>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Signaler un commentaire</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Commentaire : {{ comment.content }}</p>
-                                    <hr>
-                                    {{ form_start(report_form, {'attr': {'novalidate': 'novalidate', 'id': 'report-form'}}) }}
-                                    {{ form_end(report_form) }}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-primary" form="report-form">Signaler</button>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3>Actions</h3>
+                            {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
+                                <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}"
+                                   class="btn btn-warning mb-3">Chat retrouvé</a>
+                            {% endif %}
+                            {% if workflow_can(announce, 'to_archived') and announce.user == app.user %}
+                                <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}"
+                                   class="btn btn-secondary mb-3">Archiver l'annonce</a>
+                            {% endif %}
+                            <button type="button" class="btn btn-danger mb-3" data-bs-toggle="modal"
+                                    data-bs-target="#reportAnnounceModal">
+                                Signaler cette annonce
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="reportAnnounceModal" tabindex="-1"
+                                 aria-labelledby="reportAnnounceModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="reportAnnounceModalLabel">Signaler cette
+                                                annonce</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {{ form_start(report_announce, {'attr': {'id': 'report-announce'}}) }}
+                                            {{ form_row(report_announce.reason) }}
+                                            {{ form_row(report_announce.details) }}
+                                            {{ form_end(report_announce) }}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Annuler
+                                            </button>
+                                            <button type="submit" form="report-announce" class="btn btn-danger">
+                                                Envoyer
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 {% endif %}
-
-        {% endfor %}
-
-    {% else %}
-
-        <p> Aucun commentaire pour le moment</p>
-
-    {% endif %}
-
-    {% if app.user %}
-        <h2>Ajouter un commentaire</h2>
-
-        {{ form_start(comment_form) }}
-        <button type="submit">Envoyer</button>
-        {{ form_end(comment_form) }}
-
-    {% else %}
-
-        Veuillez <a href="{{ path('app_login') }}"> vous connecter</a> pour commenter
-
-    {% endif %}
-
-    {% if app.user %}
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reportModal">
-            Signaler cette annonce
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="reportModalLabel">Signaler cette annonce</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        {{ form_start(report_announce, {'attr': {'id': 'report-announce'}}) }}
-                        {{ form_row(report_announce.reason) }}
-                        {{ form_row(report_announce.details) }}
-                        {{ form_end(report_announce) }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" form="report-announce" class="btn btn-danger">Envoyer</button>
-                    </div>
-                </div>
             </div>
         </div>
-    {% endif %}
+    </div>
 
 
 {% endblock %}

@@ -4,13 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Announce;
 use App\Entity\Cat;
+use App\Entity\Color;
 use App\Entity\Comment;
+use App\Entity\User;
 use App\Form\AnnounceType;
 use App\Form\CatType;
 use App\Form\CommentType;
+use App\Form\RegistrationFormType;
 use App\Form\ReportAnnounceType;
 use App\Form\ReportType;
 use App\Repository\CommentRepository;
+use App\Security\AppAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +24,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Workflow\Exception\LogicException;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -36,8 +42,42 @@ class AnnounceController extends AbstractController
         $this->announceWorkflow = $announceWorkflow;
     }
 
+    #[Route('/new', name: 'app_new')]
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator,): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+            $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
+
+            return $this->redirectToRoute('app_new_cat');
+        }
+
+        return $this->render('announce/new_account.html.twig', [
+            'formRegister' => $form->createView(),
+        ]);
+    }
+
+
     #[Route('/new/cat', name: 'app_new_cat')]
-    public function new(Request $request, SessionInterface $session): Response
+    public function newCat(Request $request, SessionInterface $session, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $cat = new Cat();
 
@@ -45,17 +85,24 @@ class AnnounceController extends AbstractController
         $formCat->handleRequest($request);
 
         if ($formCat->isSubmitted() && $formCat->isValid()) {
-            $cat = $formCat->getData();
+            $color = $formCat->get('color')->getData();
+            if ($color instanceof Color) {
+                $cat->addColor($color);
+            } else {
+                $colorId = $color;
+                $colorRepository = $this->entityManager->getRepository(Color::class);
+                $color = $colorRepository->find($colorId);
+                $cat->addColor($color);
+            }
 
-            $user = $this->getUser();
-
-            // Associer l'utilisateur courant à l'annonce
-            $cat->addUser($user);
+            $userId = $this->getUser()->getId();
+            $userRepository = $this->entityManager->getRepository(User::class);
+            $user = $userRepository->find($userId);
+            $cat->setUser($user);
 
             $this->entityManager->persist($cat);
             $this->entityManager->flush();
 
-            // Stocker l'ID du chat dans la session
             $session->set('cat_id', $cat->getId());
 
             return $this->redirectToRoute('app_announce_create');
@@ -201,11 +248,10 @@ class AnnounceController extends AbstractController
             'color' => $color,
             'comment_form' => $form->createView(),
             'report_form' => $report->createView(),
-            'report_announce'=>$reportAnnounce->createView(),
+            'report_announce' => $reportAnnounce->createView(),
             'comments' => $comments,
         ]);
     }
-
 
 
     #[Route('/announce/{id}/change_state/{state}', name: 'app_announce_change_state')]
