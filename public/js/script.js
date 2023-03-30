@@ -16,3 +16,9 @@ function closeNav() {
     sidenav.classList.remove("active");
 }
 /* MENU BURGER */
+
+$(document).ready(function(){
+    $('.num').counterUp({
+        time: 1200
+    });
+});
