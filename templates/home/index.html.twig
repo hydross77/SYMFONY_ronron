@@ -3,6 +3,60 @@
 {% block title %}Ronron | Accueil{% endblock %}
 
 {% block body %}
-    {% include 'home/_filter.html.twig' with {form: searchAnnounce} only %}
+
+    <div class="section-1">
+        <div class="bdr">
+            <h1>Vous avez perdu ou retrouvé un <strong><span class="chat">Chat</span> ?</strong></h1>
+            <br>
+            <div class="sous-titre">
+                <p>Recherchez votre <em>chat perdu</em> ou <em>retrouvé</em> en toute simplicité.</p>
+                <p><strong>Ronron</strong> vous facilitera votre recherche !</p>
+            </div>
+            <br>
+
+            {% include 'home/_filter.html.twig' with {form: searchAnnounce} only %}
+        </div>
+
+        <div class="imagehome">
+            <img src="img/header.png" alt="chat couché">
+        </div>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#D2B48C" fill-opacity="1" d="M0,32L1440,160L1440,0L0,0Z"></path></svg>
+
+    <div class="section-2">
+        <div class="container text-center">
+            <div class="row align-items-start">
+                <div class="col-md-6">
+                    <h2><i class="fa-solid fa-cat"></i></h2>
+                    <a class="btn8" href="{{ path('app_new_cat') }}">Publier une annonce</a><br><br>
+                    <p class="textHome">Pour publier une annonce sur notre site pour un chat perdu ou retrouvé, cliquez simplement sur le bouton "Publier une annonce" et remplissez le formulaire avec les informations pertinentes. Assurez-vous d'inclure une description détaillée de votre chat, ainsi qu'une photo et une localisation approximative de l'endroit où il a été perdu ou trouvé. Nous recommandons également de partager l'annonce sur les réseaux sociaux pour maximiser les chances de retrouver votre chat perdu ou de trouver son propriétaire s'il a été retrouvé. Merci de faire confiance à notre site pour vous aider à retrouver votre chat bien-aimé!</p>
+                </div>
+                <div class="col-md-6">
+                    <h2 class="text-danger"><i class="fa-solid fa-heart"></i></h2>
+                    <a class="btn8" href="{{ path('app_donation_stripe') }}" target="_blank">Faire un don</a><br><br>
+                    <p class="textHome">Chers amis des chats, chaque jour, nous nous efforçons de vous aider à retrouver vos précieux compagnons félins et à les ramener dans vos bras. Nous sommes passionnés par notre mission de connecter les propriétaires de chats avec leurs animaux perdus, et cela n'aurait pas été possible sans le soutien de notre communauté. Si vous appréciez notre site et si vous souhaitez nous aider à continuer à fournir ce service important, nous vous encourageons à faire un don, quelle que soit la taille. Chaque euro compte et nous permet de continuer notre travail vital pour retrouver des chats perdus et renforcer les liens entre les propriétaires et leurs animaux de compagnie.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="lost-cat">
+        <h3>Que faire si vous perdez votre chat :</h3>
+        <ul>
+            <li>Commencez par chercher dans votre quartier et interrogez vos voisins.</li>
+            <li>Contactez les refuges locaux pour animaux et les vétérinaires pour savoir s'ils ont recueilli votre chat.</li>
+            <li>Publiez des annonces sur les réseaux sociaux et les sites d'annonces pour animaux perdus.</li>
+            <li>Mettez des affiches avec une photo de votre chat et vos coordonnées dans les endroits les plus fréquentés de votre quartier.</li>
+            <li>Laissez de la nourriture et de l'eau dehors pour votre chat, cela peut l'encourager à revenir à la maison.</li>
+        </ul>
+    </div>
+    <hr>
+    <div class="counter">
+        <div class="box">
+            <i class="fa-solid fa-cat"></i>
+            <div class="num">25,578</div>
+            Chats retrouvés
+        </div>
+    </div>
 
 {% endblock %}

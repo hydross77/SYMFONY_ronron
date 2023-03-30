@@ -14,7 +14,31 @@ Typo 2 : font-family: 'Raleway', sans-serif;
 
 /* --- FIN TYPOGRAPHIE --- */
 
+/* --- HN --- */
+
+h5{
+    color: #009DDC!important;
+    text-transform: uppercase;
+}
+
+/* --- FIN HN --- */
+
 /* --- BTN --- */
+
+.btnDon{
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+    background-color: rgb(180, 0, 4);
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+}
+
+.btnDon:hover {
+    color: #ffffff;
+    background-color: rgba(180, 0, 4, 0.8);
+}
 
 .btn1 {
     color: #2F2F2F;
@@ -106,7 +130,6 @@ nav {
     color: #2F2F2F;
     align-items: center;
     padding: 10px;
-    margin-bottom: 50px;
 }
 
 .ronron{
@@ -188,6 +211,95 @@ nav .navbar ul {
 }
 
 /* --- FIN MENU BURGER --- */
+
+/* --- HEADER HOME --- */
+
+.section-1 {
+    background-color: #D2B48C;
+    display: flex;
+    justify-content: space-around;
+    padding: 60px 20px 20px;
+}
+
+.chat {
+    font-family: 'Lobster Two', cursive;
+    font-weight: bold;
+}
+
+.customSearch{
+    width: 50%;
+}
+
+.bdr h1 {
+    font-weight: bold;
+}
+
+.sous-titre {
+    line-height: 0.5rem;
+}
+
+.btnPlace {
+    margin-bottom: 30px;
+}
+
+@media screen and (max-width: 980px) {
+    .imagehome {
+        display: none;
+    }
+    .sous-titre {
+        line-height: 20px;
+    }
+}
+
+.textHome{
+    text-align: justify;
+}
+
+.lost-cat {
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.lost-cat h3 {
+    color: #009DDC;
+}
+
+.lost-cat ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.lost-cat li {
+    margin-bottom: 10px;
+}
+
+
+.counter-sec{
+    padding: 80px 0;
+    width: 100%;
+    background: #131416;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+}
+.num{
+    font-size: 40px;
+    margin: 20px 0;
+}
+
+.box{
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+    text-transform: uppercase;
+}
+.box i{
+    font-size: 40px;
+    color: #333;
+}
+
+/* --- FIN HEADER HOME --- */
 
 /* --- FOOTER --- */
 
