@@ -1,9 +1,20 @@
-{{ announce.cat.name }}<br>
-{% for color in announce.cat.color %}
-    {{ color.name }}----<br>
-{% endfor %}
-{{ announce.cat.sexe }}<br>
-{{ announce.cat.breed }}<br>
-{{ announce.cat.lengthCoat }}<br>
-{{ announce.cat.designCoat }}<br>
-{{ announce.type }}<br><br>
+
+    <div class="card" style="width: 18rem;">
+        {% if announce.cat.picture %}
+            <img style="height: 200px; object-fit: cover" src="{{ asset('uploads/picturechat/' ~ announce.cat.picture) }}" alt="Photo du chat">
+        {% else %}
+            <div class="display-3 text-center"><i style="height: 200px; object-fit: cover" class="fa-solid fa-laptop-code"></i></div>
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ announce.cat.name }} | {{ announce.cat.sexe }}</h5>
+            <h4><i class="fa-solid fa-location-dot text-danger"></i> {{ announce.city }}, {{ announce.country }}</h4>
+            <h4><i class="fa-solid fa-cat"></i> {{ announce.cat.breed }}</h4>
+            <h2 class="text-center">{{ announce.cat.name }} est {{ announce.type }} depuis le {{ announce.dateCat|date('d/m/Y') }}</h2>
+            <div class="viewProfil">
+                {% if app.user %}
+                        <i id="favorite-icon-{{ announce.cat.id }}" class="{{ user.getFavoriteCat().contains(cat) ? 'fa-solid text-danger' : 'fa-regular text-danger' }} fa-heart" onclick="toggleFavorite({{ announce.cat.id }})"></i>
+                {% endif %}
+                <a  class="text-dark" href="{{ path('app_announce_show', {'id': announce.cat.id })}} "><i class="fa-solid fa-eye"></i></a>
+            </div>
+        </div>
+    </div>

@@ -198,5 +198,9 @@
         </div>
     </div>
 
+    {% for color in announce.cat.color %}
+        {{ color.name }}----<br>
+    {% endfor %}
+
 
 {% endblock %}
