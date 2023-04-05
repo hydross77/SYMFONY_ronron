@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Announce;
 use App\Entity\Cat;
+use App\Repository\AnnounceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,12 +15,24 @@ use Knp\Component\Pager\PaginatorInterface;
 
 class FavoriteController extends AbstractController
 {
+    private $entityManager;
+
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+
+    }
+
     #[Route('/favorite', name: 'app_favorite')]
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
+        $announces = $this->entityManager->getRepository(Announce::class)->findAll();
+
+
         $favorites = $paginator->paginate(
             $user->getFavorite(),
             $request->query->getInt('page', 1),
@@ -29,6 +43,7 @@ class FavoriteController extends AbstractController
             'controller_name' => 'FavoriteController',
             'favorites' => $favorites,
             'user' => $user,
+            'announces' => $announces,
         ]);
     }
 

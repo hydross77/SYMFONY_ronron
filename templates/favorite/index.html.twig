@@ -2,21 +2,35 @@
 
 {% block title %}Ronron | Favoris{% endblock %}
 
-
 {% block body %}
-    <h1 class="text-center mt-3">Mes chats favoris</h1>
-                {% if favorites is not empty %}
-                    {% for cat in favorites %}
-                        <div class="card">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Mes chats favoris</h1>
+
+        <div class="row">
+            {% if favorites|length > 0 %}
+                {% for cat in favorites.items %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="{{ cat.picture }}" class="card-img-top" alt="{{ cat.name }}">
                             <div class="card-body">
-                                <p class="card-title">{{ cat.name }}</p>
+                                <h5 class="card-title">{{ cat.name }} | {{ cat.age }} an(s)</h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% for announce in cat.announces %}
+                                        <a class="text-dark" href="{{ path('app_announce_show', {'id': announce.id}) }}"><i class="fa-solid fa-eye"></i></a>
+                                    {% endfor %}
+                                    <i id="favorite-icon-{{ cat.id }}" class="{{ user.getFavorite().contains(cat) ? 'fa-solid text-danger' : 'fa-regular text-danger' }} fa-heart btnFav" onclick="toggleFavorite({{ cat.id }})"></i>
+                                </div>
                             </div>
                         </div>
-                    {% endfor %}
-                    {% else %}
-                        Aucun favori
-                    {% endif %}
-        <div class="pagination" style="float:right">
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">Aucun chat favori.</p>
+            {% endif %}
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
             {{ knp_pagination_render(favorites) }}
         </div>
+    </div>
 {% endblock %}
