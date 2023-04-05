@@ -21,13 +21,13 @@
                             {{ form_errors(formEdit.pseudo) }}
                         </div>
                         <div class="d-grid gap-2 mt-5">
-                            <button class="btn btn-primary" type="submit">Modifier mes informations</button>
+                            <button class="btnSoumission" type="submit">Modifier mes informations</button>
                         </div>
                         {{ form_end(formEdit) }}
 
                         <hr>
 
-                        <div class="text-center mt-5">
+                        <div class="text-center mt-1">
                             <a class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ?')" href="{{ path('delete_account') }}">Supprimer mon compte</a>
                         </div>
                     </div>

@@ -9,17 +9,18 @@
         <div class="row">
             {% if favorites|length > 0 %}
                 {% for cat in favorites.items %}
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <img src="{{ cat.picture }}" class="card-img-top" alt="{{ cat.name }}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ cat.name }} | {{ cat.age }} an(s)</h5>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    {% for announce in cat.announces %}
-                                        <a class="text-dark" href="{{ path('app_announce_show', {'id': announce.id}) }}"><i class="fa-solid fa-eye"></i></a>
-                                    {% endfor %}
-                                    <i id="favorite-icon-{{ cat.id }}" class="{{ user.getFavorite().contains(cat) ? 'fa-solid text-danger' : 'fa-regular text-danger' }} fa-heart btnFav" onclick="toggleFavorite({{ cat.id }})"></i>
-                                </div>
+                    <div class="card" style="width: 18rem;">
+                        {% if cat.picture %}
+                            <img style="height: 200px; object-fit: cover" src="{{ asset('uploads/picturechat/' ~ cat.picture) }}" alt="Photo du chat">
+                        {% else %}
+                            <div class="display-3 text-center"><i style="height: 200px; object-fit: cover" class="fa-solid fa-laptop-code"></i></div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cat.name }} | {{ cat.sexe }}</h5>
+                            <h4><i class="fa-solid fa-cat"></i> {{ cat.breed }}</h4>
+                            <div class="viewProfil">
+
+                                <a  class="text-dark" href="{{ path('app_announce_show', {'id': cat.id })}} "><i class="fa-solid fa-eye"></i></a>
                             </div>
                         </div>
                     </div>

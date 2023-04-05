@@ -11,9 +11,7 @@
             <h4><i class="fa-solid fa-cat"></i> {{ announce.cat.breed }}</h4>
             <h2 class="text-center">{{ announce.cat.name }} est {{ announce.type }} depuis le {{ announce.dateCat|date('d/m/Y') }}</h2>
             <div class="viewProfil">
-                {% if app.user %}
-                        <i id="favorite-icon-{{ announce.cat.id }}" class="{{ user.getFavoriteCat().contains(cat) ? 'fa-solid text-danger' : 'fa-regular text-danger' }} fa-heart" onclick="toggleFavorite({{ announce.cat.id }})"></i>
-                {% endif %}
+
                 <a  class="text-dark" href="{{ path('app_announce_show', {'id': announce.cat.id })}} "><i class="fa-solid fa-eye"></i></a>
             </div>
         </div>
