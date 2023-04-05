@@ -22,3 +22,35 @@ $(document).ready(function(){
         time: 1200
     });
 });
+
+/** Favoris **/
+
+function toggleFavorite(catId) {
+
+    var icon = document.getElementById("favorite-icon-" + catId);
+
+
+    if (icon.classList.contains("fa-solid")) {
+
+        fetch("/favorite/" + catId, {
+            method: "DELETE",
+        }).then(r => r.json()).then(data => {
+            if (data.success) {
+                icon.classList.remove("fa-solid");
+                icon.classList.add("fa-regular");
+            }
+        }).then(()=>{
+            location.reload();
+        })
+    } else {
+
+        fetch("/favorite/" + catId, {
+            method: "POST",
+        }).then(r => r.json()).then(data => {
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+        }).then(()=>{
+            location.reload();
+        });
+    }
+}
