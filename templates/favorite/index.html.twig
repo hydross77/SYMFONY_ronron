@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ronron | Favoris{% endblock %}
+
+
+{% block body %}
+    <h1 class="text-center mt-3">Mes chats favoris</h1>
+                {% if favorites is not empty %}
+                    {% for cat in favorites %}
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">{{ cat.name }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% else %}
+                        Aucun favori
+                    {% endif %}
+        <div class="pagination" style="float:right">
+            {{ knp_pagination_render(favorites) }}
+        </div>
+{% endblock %}

@@ -162,6 +162,8 @@ class AnnounceController extends AbstractController
     {
         $announce = $this->entityManager->getRepository(Announce::class)->find($id);
 
+        $user = $this->getUser() ?? null;
+
         if (!$announce) {
             throw new NotFoundHttpException("L'annonce avec l'ID $id n'existe pas.");
         }
@@ -244,6 +246,7 @@ class AnnounceController extends AbstractController
 
         return $this->render('announce/show.html.twig', [
             'announce' => $announce,
+            'user'=>$user,
             'cat' => $cat,
             'color' => $color,
             'comment_form' => $form->createView(),

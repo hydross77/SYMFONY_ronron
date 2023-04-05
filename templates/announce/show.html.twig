@@ -163,6 +163,13 @@
                                     data-bs-target="#reportAnnounceModal">
                                 Signaler cette annonce
                             </button>
+                            <p class="mt-2">
+                                {{ user.getFavorite().contains(cat) ? 'Supprimer de favoris' : 'Mettre en favoris' }}
+                                <i id="favorite-icon-{{ cat.id }}"
+                                   class="{{ user.getFavorite().contains(cat) ? 'fa-solid text-danger' : 'fa-regular text-danger' }} fa-heart btnFav"
+                                   onclick="toggleFavorite({{ cat.id }})">
+                                </i>
+                            </p>
                             <!-- Modal -->
                             <div class="modal fade" id="reportAnnounceModal" tabindex="-1"
                                  aria-labelledby="reportAnnounceModalLabel" aria-hidden="true">
