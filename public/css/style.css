@@ -29,7 +29,7 @@ h5{
     text-decoration: none;
     color: #ffffff;
     font-weight: bold;
-    background-color: rgb(180, 0, 4);
+    background-color: rgb(217, 0, 4);
     border-radius: 10px;
     padding: 10px;
     border: none;
@@ -739,11 +739,6 @@ nav .navbar ul {
     }
 }
 
-.card:hover {
-    cursor: pointer;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-}
-
 .wrapper_resultat{
     display: flex;
     gap: 25px;
@@ -799,22 +794,6 @@ nav .navbar ul {
     text-align: right;
 }
 
-.btn6{
-    background-color: #479f9f;
-    padding: 10px;
-    border-radius: 8px;
-    color: white;
-}
-.btnFav{
-    background-color: #479f9f;
-    padding: 10px;
-    border-radius: 8px;
-    color: white;
-}
-.btnFav:hover{
-    cursor: pointer;
-    color: red;
-}
 
 /* --- FIN RESULTAT BDR --- */
 

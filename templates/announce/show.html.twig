@@ -33,6 +33,11 @@
                 <div class="card mt-4">
                     <h2 class="card-header">Information sur le chat</h2>
                     <div class="card-body">
+                        {% if announce.cat.picture %}
+                            <img style="height: 200px; object-fit: cover" src="{{ asset('uploads/picturechat/' ~ announce.cat.picture) }}" alt="Photo du chat">
+                        {% else %}
+                            Aucune photo.
+                        {% endif %}
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Nom
                                     :</strong> {{ announce.cat.name ?? 'Non renseigné' }}</li>
@@ -70,8 +75,9 @@
                     </div>
                 </div>
 
+                <hr>
+
                 <div class="mt-4">
-                    <h2>Commentaires</h2>
                     {% if comments %}
                         {% for comment in comments %}
                             <div class="card mb-3">
@@ -135,7 +141,7 @@
                                 <h3>Ajouter un commentaire</h3>
                                 {{ form_start(comment_form) }}
                                 {{ form_row(comment_form.content, {'attr': {'class': 'form-control', 'placeholder': 'Votre commentaire...'}}) }}
-                                <button type="submit" class="btn btn-primary mt-2">Envoyer</button>
+                                <button type="submit" class="btnSoumission mt-2">Envoyer</button>
                                 {{ form_end(comment_form) }}
                             </div>
                         </div>
@@ -204,10 +210,6 @@
             </div>
         </div>
     </div>
-
-    {% for color in announce.cat.color %}
-        {{ color.name }}----<br>
-    {% endfor %}
 
 
 {% endblock %}

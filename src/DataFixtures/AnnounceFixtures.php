@@ -43,7 +43,7 @@ class AnnounceFixtures extends Fixture implements DependentFixtureInterface
 
             $annonce = new Announce();
             $annonce
-                ->setType($faker->randomElement(['lost', 'found']))
+                ->setType($faker->randomElement(['Perdu', 'Retrouvé']))
                 ->setDateCat($faker->dateTime())
                 ->setDescription($faker->sentences(3, true))
                 ->setCp($faker->randomElement(['67200', '67000']))
