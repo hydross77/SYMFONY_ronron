@@ -172,7 +172,7 @@
                             <p class="mt-2">
                                 {{ user.getFavorite().contains(cat) ? 'Supprimer de favoris' : 'Mettre en favoris' }}
                                 <i id="favorite-icon-{{ cat.id }}"
-                                   class="{{ user.getFavorite().contains(cat) ? 'fa-solid text-danger' : 'fa-regular text-danger' }} fa-heart btnFav"
+                                   class="{{ user.getFavorite().contains(cat) ? 'fa-solid text-danger' : 'fa-regular text-danger' }} fa-heart"
                                    onclick="toggleFavorite({{ cat.id }})">
                                 </i>
                             </p>
