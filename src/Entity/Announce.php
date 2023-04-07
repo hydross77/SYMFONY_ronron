@@ -43,7 +43,7 @@ class Announce
     #[ORM\ManyToOne(inversedBy: 'announces')]
     private ?Cat $cat = null;
 
-    #[ORM\ManyToOne(inversedBy: 'announces')]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ["persist"], inversedBy: "announces")]
     private ?User $User = null;
 
     #[ORM\OneToMany(mappedBy: 'announce', targetEntity: Comment::class)]
