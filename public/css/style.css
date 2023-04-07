@@ -132,7 +132,12 @@ nav {
     padding: 10px;
 }
 
-.ronron{
+.ronron-logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.ronron {
     font-family: 'Lobster Two', cursive;
     font-size: xxx-large;
     font-weight: bold;
