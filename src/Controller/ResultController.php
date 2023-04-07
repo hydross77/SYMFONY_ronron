@@ -34,7 +34,7 @@ class ResultController extends AbstractController
             $announces = $paginator->paginate(
                 $repository->findSearch($parameters),
                 $request->query->getInt('page', 1),
-                12
+                12,
             );
 
         } else {
@@ -48,7 +48,7 @@ class ResultController extends AbstractController
                     'design_coat' => $design,
                 ]),
                 $request->query->getInt('page', 1),
-                12
+                12,
             );
         }
 

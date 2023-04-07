@@ -122,7 +122,7 @@ class SearchForm2 extends SearchForm
             ->add('city', TextType::class, [
                 'required'=>false,
                 'label' => false,
-                'attr' => ['id' => 'city'],
+                'attr' => ['class' => 'city'],
             ])
             ->add('color', EntityType::class, [
                 'label' => false,

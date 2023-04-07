@@ -210,6 +210,8 @@ class AnnounceController extends AbstractController
             // Associate the current user with the announcement
             $announce->setUser($user);
 
+            $announce->setCountry('France');
+
             $this->entityManager->persist($user);
 
             try {
