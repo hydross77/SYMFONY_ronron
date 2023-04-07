@@ -8,16 +8,21 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h1 class="text-center mb-3">Informations du chat</h1>
+                <h6 class="text-center">Complétez autant d'informations que possible dans ce formulaire pour augmenter les chances de retrouvaille que vous avez perdu ou retrouvé un chat.</h6>
+                <hr>
+
 
                 {{ form_start(formCat, {'attr': {'id': 'formCat'}}) }}
                 <div class="form-group mb-3">
                     {{ form_row(formCat.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom du chat'}}) }}
                     {{ form_errors(formCat.name) }}
                 </div>
+
                 <div class="form-group mb-3">
-                    {{ form_row(formCat.color, {'attr': {'class': 'form-control', 'placeholder': 'Couleur du chat'}}) }}
+                    {{ form_row(formCat.color) }}
                     {{ form_errors(formCat.color) }}
                 </div>
+
                 <div class="form-group mb-3">
                     {{ form_row(formCat.age, {'attr': {'class': 'form-control', 'placeholder': 'Âge du chat'}}) }}
                     {{ form_errors(formCat.age) }}
@@ -31,18 +36,15 @@
                     {{ form_errors(formCat.tattoo) }}
                 </div>
                 <div class="form-group mb-3">
-                    {{ form_row(formCat.sterelized, {'attr': {'class': 'form-check-input'}}) }}
-                    {{ form_label(formCat.sterelized, 'Stérélisé', {'label_attr': {'class': 'form-check-label'}}) }}
+                    {{ form_row(formCat.sterelized, {'attr': {'class': 'form-control', 'placeholder': 'Stérilisé'}}) }}
                     {{ form_errors(formCat.sterelized) }}
                 </div>
                 <div class="form-group mb-3">
-                    <label for="designCoat" class="form-label">Style de pelage</label>
                     {{ form_row(formCat.designCoat, {'attr': {'class': 'form-control', 'placeholder': 'Style de pelage'}}) }}
                     {{ form_errors(formCat.designCoat) }}
                 </div>
                 <div class="form-group mb-3">
-                    <label for="lengthCoat" class="form-label">Longueur de pelage</label>
-                    {{ form_row(formCat.lengthCoat, {'attr': {'class': 'form-control', 'placeholder': 'Longueur de pelage'}}) }}
+                    {{ form_row(formCat.lengthCoat, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(formCat.lengthCoat) }}
                 </div>
                 <div class="form-group mb-3">
@@ -58,7 +60,7 @@
                     {{ form_errors(formCat.picture) }}
                 </div>
                 <div class="text-center">
-                    <button class="btn btn-success" type="submit">Enregistrer</button>
+                    <button class="btnSoumission" type="submit">Enregistrer</button>
                 </div>
                 {{ form_end(formCat) }}
             </div>

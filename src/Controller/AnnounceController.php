@@ -17,6 +17,7 @@ use App\Repository\CommentRepository;
 use App\Security\AppAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -28,6 +29,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Workflow\Exception\LogicException;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -77,7 +79,7 @@ class AnnounceController extends AbstractController
 
 
     #[Route('/new/cat', name: 'app_new_cat')]
-    public function newCat(Request $request, SessionInterface $session, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function newCat(Request $request, SessionInterface $session, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger): Response
     {
         $cat = new Cat();
 
@@ -93,6 +95,23 @@ class AnnounceController extends AbstractController
                 $colorRepository = $this->entityManager->getRepository(Color::class);
                 $color = $colorRepository->find($colorId);
                 $cat->addColor($color);
+            }
+
+            $pictureProfil = $formCat->get('picture')->getData();
+
+            if ($pictureProfil) {
+                $originalFilename = pathinfo($pictureProfil->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $pictureProfil->guessExtension();
+
+                try {
+                    $pictureProfil->move(
+                        $this->getParameter('picturechat'),
+                        $newFilename
+                    );
+                } catch (FileException $error) {
+                }
+                $cat->setPicture($newFilename);
             }
 
             $userId = $this->getUser()->getId();
