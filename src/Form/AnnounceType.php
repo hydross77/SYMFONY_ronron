@@ -45,6 +45,7 @@ class AnnounceType extends AbstractType
             ])
             ->add('city', TextType::class,[
                 "label" => "Dans quelle ville ?",
+                "attr" => ['class' => 'city'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez saisir une ville.',

@@ -33,6 +33,7 @@ class AnnounceRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('a');
         $qb->leftJoin('a.cat', 'cat');
         $qb->leftJoin('cat.color', 'color');
+        $qb->orderBy('a.dateCat', 'DESC');
 
         if (!empty($parameters['type'])) {
             $qb->andWhere('a.type = :type')
@@ -83,6 +84,7 @@ class AnnounceRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('a');
         $qb->join('a.cat', 'cat');
         $qb->leftJoin('cat.color', 'color');
+        $qb->orderBy('a.dateCat', 'DESC');
 
         if (!empty($parameters['name'])) {
             $qb->andWhere('cat.name LIKE :name')
@@ -101,7 +103,6 @@ class AnnounceRepository extends ServiceEntityRepository
             $qb->andWhere('color.id IN (:colors)')
                 ->setParameter('colors', $colors);
         }
-
 
         return $qb->getQuery();
     }
