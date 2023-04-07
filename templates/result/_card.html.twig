@@ -12,7 +12,7 @@
             <h2 class="text-center">{{ announce.cat.name }} est {{ announce.type }} depuis le {{ announce.dateCat|date('d/m/Y') }}</h2>
             <div class="viewProfil">
                 {% if app.user %}
-                    <i id="favorite-icon-{{ announce.cat.id }}" class="{{ app.user and announce.cat in app.user.favorite ? 'fa-solid' : 'fa-regular' }} fa-heart" style="cursor: pointer" onclick="toggleFavorite({{ announce.cat.id }}, event)"></i>
+                    <i id="favorite-icon-{{ announce.cat.id }}" class="{{ app.user and announce.cat in app.user.favorite ? 'fa-solid' : 'fa-regular' }} fa-heart" style="cursor: pointer; color:red;" onclick="toggleFavorite({{ announce.cat.id }}, event)"></i>
 
                 {% endif %}
 
