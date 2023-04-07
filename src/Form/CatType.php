@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class CatType extends AbstractType
 {
@@ -25,13 +26,14 @@ class CatType extends AbstractType
                     'maxlength' => 20, // Définir une longueur maximale pour éviter les attaques par débordement de tampon
                 ],
             ])
-            ->add('color', EntityType::class, [
+            ->add('colors', EntityType::class, [
                 'label' => 'Couleur(s) :',
+                'required' => true,
                 'mapped' => false,
                 'class' => Color::class,
                 'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => true,
+                'multiple' => true, // Définit que le champ permet un choix multiple
+                'expanded' => true, // Définit que le champ est affiché sous forme de boutons (si vous souhaitez des cases à cocher, utilisez false)
             ])
             ->add('age', IntegerType::class, [
                 'label' => 'Son âge :',
@@ -159,8 +161,18 @@ class CatType extends AbstractType
                 'label' => 'Photo :',
                 'required' => false,
                 'mapped' => false,
-            ])
-        ;
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            // Ajoutez d'autres types de fichiers autorisés si nécessaire
+                        ],
+                        'mimeTypesMessage' => 'Veuillez choisir un fichier JPG ou PNG valide.',
+                    ])
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

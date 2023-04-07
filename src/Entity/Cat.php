@@ -30,7 +30,7 @@ class Cat
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $sterelized = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $designCoat = null;
 
     #[ORM\Column(length: 30, nullable: true)]
