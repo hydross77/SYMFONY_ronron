@@ -87,15 +87,16 @@ class AnnounceController extends AbstractController
         $formCat->handleRequest($request);
 
         if ($formCat->isSubmitted() && $formCat->isValid()) {
-            $color = $formCat->get('color')->getData();
-            if ($color instanceof Color) {
-                $cat->addColor($color);
-            } else {
-                $colorId = $color;
-                $colorRepository = $this->entityManager->getRepository(Color::class);
-                $color = $colorRepository->find($colorId);
+            $colors = $formCat->get('colors')->getData();
+            foreach ($colors as $color) {
+                if (!$color instanceof Color) {
+                    $colorId = $color->getId();
+                    $colorRepository = $this->entityManager->getRepository(Color::class);
+                    $color = $colorRepository->find($colorId);
+                }
                 $cat->addColor($color);
             }
+
 
             $pictureProfil = $formCat->get('picture')->getData();
 
@@ -106,7 +107,7 @@ class AnnounceController extends AbstractController
 
                 try {
                     $pictureProfil->move(
-                        $this->getParameter('picturechat'),
+                        $this->getParameter('picture'),
                         $newFilename
                     );
                 } catch (FileException $error) {
