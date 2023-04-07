@@ -44,6 +44,60 @@ class AnnounceController extends AbstractController
         $this->announceWorkflow = $announceWorkflow;
     }
 
+    #[Route('/myannounce/{id}', name: 'app_announce')]
+    public function index(int $id): Response
+    {
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+
+        // Vérifier si l'utilisateur est connecté
+        if ($user === null) {
+            // Rediriger vers une page d'erreur ou retourner une réponse appropriée
+            // en cas d'utilisateur non connecté
+            return $this->render('utilisation/error.html.twig');
+        }
+
+        // Récupérer les annonces de l'utilisateur
+        $announces = $user->getAnnounces();
+
+        // Passer les annonces à la vue pour les afficher
+        return $this->render('announce/index.html.twig', [
+            'announces' => $announces,
+        ]);
+    }
+
+    #[Route('/deleteannounce/{id}', name: 'app_delete_announce')]
+    public function deleteAnnounce(Request $request, EntityManagerInterface $entityManager, $id): Response
+    {
+
+        $user = $this->getUser();
+
+        // Récupérer l'annonce à partir de l'identifiant
+        $announce = $entityManager->getRepository(Announce::class)->find($id);
+
+        // Vérifier si l'annonce existe
+        if (!$announce) {
+            throw $this->createNotFoundException('Annonce non trouvée');
+        }
+
+        // Vérifier si l'utilisateur est propriétaire de l'annonce
+        if ($this->getUser() !== $announce->getUser()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer cette annonce.');
+        }
+
+        // Supprimer l'annonce
+        $entityManager->remove($announce);
+        $entityManager->flush();
+
+        // Rediriger vers la page "Mes annonces" avec un message de succès
+        $this->addFlash('success', 'L\'annonce a été supprimée avec succès.');
+        return $this->redirectToRoute('app_announce', ['id' => $user->getId()]);
+    }
+
+
+
+
+
     #[Route('/new', name: 'app_new')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator,): Response
     {

@@ -13,20 +13,10 @@
                         <p class="card-text">Status :
                             {% if workflow_has_marked_place(announce, 'online') %}
                                 <span class="badge bg-success">En ligne</span>
-                            {% elseif workflow_has_marked_place(announce, 'found') %}
-                                <span class="badge bg-warning">Chat retrouvé</span>
                             {% elseif workflow_has_marked_place(announce, 'archived') %}
                                 <span class="badge bg-secondary">Annonce archivée</span>
                             {% endif %}
                         </p>
-                        {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
-                            <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}"
-                               class="btn btn-warning">Chat retrouvé</a>
-                        {% endif %}
-                        {% if workflow_can(announce, 'to_archived') and announce.user == app.user %}
-                            <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}"
-                               class="btn btn-secondary">Archiver l'annonce</a>
-                        {% endif %}
                     </div>
                 </div>
 
@@ -157,14 +147,15 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h3>Actions</h3>
-                            {% if workflow_can(announce, 'to_found') and announce.user == app.user %}
-                                <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_found'}) }}"
-                                   class="btn btn-warning mb-3">Chat retrouvé</a>
-                            {% endif %}
+                            <button type="button" class="btnSoumission mb-3" data-bs-toggle="modal"
+                                    data-bs-target="#reportPersonneModal">
+                                Afficher le numéro de téléphone
+                            </button>
                             {% if workflow_can(announce, 'to_archived') and announce.user == app.user %}
                                 <a href="{{ path('app_announce_change_state', {'id': announce.id, 'state': 'to_archived'}) }}"
                                    class="btn btn-secondary mb-3">Archiver l'annonce</a>
                             {% endif %}
+                            <br>
                             <button type="button" class="btn btn-danger mb-3" data-bs-toggle="modal"
                                     data-bs-target="#reportAnnounceModal">
                                 Signaler cette annonce
@@ -199,6 +190,32 @@
                                             </button>
                                             <button type="submit" form="report-announce" class="btn btn-danger">
                                                 Envoyer
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="reportPersonneModal" tabindex="-1"
+                                 aria-labelledby="reportAnnounceModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="reportAnnounceModalLabel">Numéro de téléphone</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% if announce.user.phone is defined and announce.user.phone != '' %}
+                                                {{ announce.user.phone }}
+                                            {% else %}
+                                                La personne n'a pas indiqué son numéro de téléphone, laissez un commentaire en bas de page, elle en sera notifiée.
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Fermer
                                             </button>
                                         </div>
                                     </div>
