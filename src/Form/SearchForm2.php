@@ -21,13 +21,12 @@ class SearchForm2 extends SearchForm
     {
         $builder
             ->add('type', ChoiceType::class, [
-                'label' => false,
+                'label' => 'Perdu/Retrouvé :',
                 'required' => false,
                 'choices' => [
-                    'Perdu' => 'lost',
-                    'Retrouvé' => 'found',
+                    'Perdu' => 'Perdu',
+                    'Retrouvé' => 'Retrouvé',
                 ],
-                'placeholder' => 'Perdu/Retrouvé',
             ])
             ->add('sexe', ChoiceType::class, [
                 'label' => false,
@@ -35,8 +34,8 @@ class SearchForm2 extends SearchForm
                 'choices' => [
                     'Mâle' => 'Mâle',
                     'Femelle' => 'Femelle',
+                    'Inconnu' => 'Inconnu',
                 ],
-                'placeholder' => 'Inconnu',
             ])
             ->add('length_coat', ChoiceType::class, [
                 'label' => false,
@@ -44,8 +43,8 @@ class SearchForm2 extends SearchForm
                 'choices' => [
                     'Court' => 'Court',
                     'Long' => 'Long',
+                    'Ne sais pas' => 'Ne sais pas',
                 ],
-                'placeholder' => 'Ne sais pas',
             ])
             ->add('design_coat', ChoiceType::class, [
                 'label' => false,
@@ -54,14 +53,14 @@ class SearchForm2 extends SearchForm
                     'Uni' => 'Uni',
                     'Tacheté' => 'Tacheté',
                     'Tigré' => 'Tigré',
+                    'Ne sais pas' => 'Ne sais pas',
                 ],
-                'placeholder' => 'Ne sais pas',
             ])
             ->add('breed', ChoiceType::class, [
                 'label' => false,
                 'required' => false,
                 'choices' => [
-                    'Pas de race' => 'Pas de race',
+                    'Aucune' => 'Aucune',
                     'Abyssin' => 'Abyssin',
                     'American Bobtail' => 'American Bobtail',
                     'American Curl' => 'American Curl',
@@ -117,7 +116,6 @@ class SearchForm2 extends SearchForm
                     'Turkish Van' => 'Turkish Van'
 
                 ],
-                'placeholder' => 'Race de chat',
             ])
             ->add('city', TextType::class, [
                 'required'=>false,
@@ -135,6 +133,7 @@ class SearchForm2 extends SearchForm
                     return $color ? $color->getId() : '';
                 },
                 'placeholder' => 'Choisir une couleur',
+                'by_reference' => false, // Ajoutez cette ligne
             ]);
 
     }
@@ -143,7 +142,7 @@ class SearchForm2 extends SearchForm
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'method' => 'GET'
+            'method' => 'POST'
         ]);
     }
 

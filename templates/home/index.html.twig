@@ -9,12 +9,16 @@
             <h1>Vous avez perdu ou retrouvé un <strong><span class="chat">Chat</span> ?</strong></h1>
             <br>
             <div class="sous-titre">
-                <p>Recherchez votre <em>chat perdu</em> ou <em>retrouvé</em> en toute simplicité.</p>
-                <p><strong>Ronron</strong> vous facilitera votre recherche !</p>
+                <p>Publiez une annonce du <em>chat perdu</em> ou <em>retrouvé</em> en toute simplicité.</p>
+                <p>Ou recherchez un chat parmis les annonces de notre site <strong>Ronron</strong> !</p>
             </div>
             <br>
+            <div class="d-flex flex-column align-items-center mt-4">
+                <a class="btnHome mb-2" href="{{ path('app_new_cat') }}">Publier une annonce</a>
+                <span class="text-center">ou</span>
+                <a class="btnHome mt-2" href="{{ path('app_result') }}">Rechercher un chat</a>
+            </div>
 
-            {% include 'home/_filter.html.twig' with {form: searchAnnounce} only %}
         </div>
 
         <div class="imagehome">
