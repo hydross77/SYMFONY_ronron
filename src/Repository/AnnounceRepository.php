@@ -31,9 +31,10 @@ class AnnounceRepository extends ServiceEntityRepository
     public function findSearch(array $parameters): Query
     {
         $qb = $this->createQueryBuilder('a');
-        $qb->leftJoin('a.cat', 'cat');
-        $qb->leftJoin('cat.color', 'color');
-        $qb->orderBy('a.dateCat', 'DESC');
+        $qb->orderBy('a.dateCat', 'DESC')
+            ->leftJoin('a.cat', 'cat')
+            ->leftJoin('cat.color', 'color');
+
 
         if (!empty($parameters['type'])) {
             $qb->andWhere('a.type = :type')
@@ -67,7 +68,7 @@ class AnnounceRepository extends ServiceEntityRepository
 
         if (!empty($parameters['color'])) {
             $colors = is_array($parameters['color']) ? $parameters['color'] : [$parameters['color']];
-            $qb->andWhere($qb->expr()->in('color.id', ':colors'))
+            $qb->andWhere('color.id IN (:colors)')
                 ->setParameter('colors', $colors);
         }
 

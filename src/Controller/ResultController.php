@@ -26,17 +26,22 @@ class ResultController extends AbstractController
         $searchAnnounce->handleRequest($request);
 
         if ($searchAnnounce->isSubmitted() && $searchAnnounce->isValid()) {
-            $parameters = $request->query->all();
-            $color = $searchAnnounce->get('color')->getData();
-            $parameters['color'] = is_array($color) ? array_filter($color, 'is_scalar') : [$color];
-
+            $formData = $searchAnnounce->getData();
+            $parameters = [
+                'type' => $formData['type'],
+                'city' => $formData['city'],
+                'breed' => $formData['breed'],
+                'sexe' => $formData['sexe'],
+                'length_coat' => $formData['length_coat'],
+                'design_coat' => $formData['design_coat'],
+                'color' => $formData['color'] ? array_map('intval', array_filter($formData['color']->toArray(), 'is_scalar')) : null,
+            ];
 
             $announces = $paginator->paginate(
                 $repository->findSearch($parameters),
                 $request->query->getInt('page', 1),
-                12,
+                12
             );
-
         } else {
             $announces = $paginator->paginate(
                 $repository->findSearch([
@@ -48,13 +53,12 @@ class ResultController extends AbstractController
                     'design_coat' => $design,
                 ]),
                 $request->query->getInt('page', 1),
-                12,
+                12
             );
         }
 
-
         return $this->render('result/index.html.twig', [
-            'announces' => $announces ?? null,
+            'announces' => $announces,
             'user' => $user ?? null,
             'searchAnnounce2' => $searchAnnounce->createView()
         ]);

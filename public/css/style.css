@@ -113,6 +113,24 @@ h5{
     background-color: rgba(0, 157, 220, 0.81);
 }
 
+.btnHome{
+    text-decoration: none;
+    background-color: #009DDC;
+    color: white;
+    border: none;
+    padding: 20px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.btnHome:hover{
+    background-color: rgba(0, 157, 220, 0.81);
+}
+
+.boutonHome{
+
+}
 /* --- FIN BTN --- */
 
 /* --- NAVBAR --- */
@@ -797,16 +815,6 @@ nav .navbar ul {
 
 /* --- FIN RESULTAT BDR --- */
 
-.btnFav{
-    background-color: #479f9f;
-    padding: 10px;
-    border-radius: 8px;
-    color: white;
-}
-.btnFav:hover{
-    cursor: pointer;
-    color: red;
-}
 
 
 
