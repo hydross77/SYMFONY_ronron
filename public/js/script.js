@@ -25,13 +25,17 @@ $(document).ready(function(){
 
 /** Favoris **/
 
-function toggleFavorite(catId) {
+function toggleFavorite(catId, event) {
 
+    event.preventDefault();
+    // Get the heart icon element
     var icon = document.getElementById("favorite-icon-" + catId);
 
 
+    // Check if the freelancer is already a favorite
     if (icon.classList.contains("fa-solid")) {
 
+        // Send a DELETE request to the server to remove the freelancer from favorites
         fetch("/favorite/" + catId, {
             method: "DELETE",
         }).then(r => r.json()).then(data => {
@@ -43,14 +47,13 @@ function toggleFavorite(catId) {
             location.reload();
         })
     } else {
+        // Add the freelancer to favorites
 
         fetch("/favorite/" + catId, {
             method: "POST",
         }).then(r => r.json()).then(data => {
             icon.classList.remove("fa-regular");
             icon.classList.add("fa-solid");
-        }).then(()=>{
-            location.reload();
         });
     }
 }
