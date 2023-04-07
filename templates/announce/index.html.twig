@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ronron | Annonce{% endblock %}
+
+{% block body %}
+
+    <!-- Affichage des annonces de l'utilisateur -->
+    <div class="container mt-5">
+        <h1 class="text-center">Mes annonces</h1>
+        <table class="table table-striped mt-4 text-center">
+            <thead>
+            <tr>
+                <th>Chat</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for announce in announces %}
+                <tr>
+                    <td>{{ announce.cat.name }}</td>
+                    <td>
+                        <a href="{{ path('app_announce_show', {'id': announce.id })}}" class="btn btn-primary btn-sm mr-2">
+                            Voir
+                        </a>
+                        <a href="{{ path('app_delete_announce', {'id': announce.id })}}" class="btn btn-danger btn-sm">
+                            Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+
+{% endblock %}

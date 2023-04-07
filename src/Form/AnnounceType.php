@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Announce;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -79,6 +80,10 @@ class AnnounceType extends AbstractType
                         'maxMessage' => 'La rue ne peut pas dépasser 100 caractères.',
                     ]),
                 ],
+            ])
+            ->add('country', CountryType::class, [
+                'data' => 'FR', // Valeur par défaut
+                'label' => 'Pays', // Libellé du champ
             ])
             ->add('description', TextareaType::class,[
                 "label" => "Ajouter une description",

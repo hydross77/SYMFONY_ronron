@@ -13,15 +13,11 @@ framework:
             places:
                 - redaction
                 - online
-                - found
                 - archived
             transitions:
                 to_online:
                     from: redaction
                     to: online
-                to_found:
-                    from: online
-                    to: found
                 to_archived:
-                    from: found
+                    from: online
                     to: archived
