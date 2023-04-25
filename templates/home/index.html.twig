@@ -14,7 +14,11 @@
             </div>
             <br>
             <div class="d-flex flex-column align-items-center mt-4">
-                <a class="btnHome mb-2" href="{{ path('app_new_cat') }}">Publier une annonce</a>
+                {% if app.user %}
+                    <a class="btnHome mb-2" href="{{ path('app_new_cat') }}">Publier une annonce</a>
+                {% else %}
+                    <a class="btnHome mb-2" href="{{ path('app_new') }}">Publier une annonce</a>
+                {% endif %}
                 <span class="text-center">ou</span>
                 <a class="btnHome mt-2" href="{{ path('app_result') }}">Rechercher un chat</a>
             </div>
