@@ -46,7 +46,7 @@ class Announce
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ["persist"], inversedBy: "announces")]
     private ?User $User = null;
 
-    #[ORM\OneToMany(mappedBy: 'announce', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'announce', targetEntity: Comment::class, cascade: ["remove"])]
     private Collection $comments;
 
     public function __construct()

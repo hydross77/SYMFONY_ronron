@@ -22,6 +22,9 @@
                         <a href="{{ path('app_announce_show', {'id': announce.id })}}" class="btn btn-primary btn-sm mr-2">
                             Voir
                         </a>
+                        <a href="{{ path('update_announce', {'id': announce.id })}}" class="btn btn-warning btn-sm">
+                            Modifier
+                        </a>
                         <a href="{{ path('app_delete_announce', {'id': announce.id })}}" class="btn btn-danger btn-sm">
                             Supprimer
                         </a>
@@ -32,6 +35,7 @@
         </table>
     </div>
 
+    <!-- Modal -->
 
 
 

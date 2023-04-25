@@ -156,6 +156,8 @@
                                    class="btn btn-secondary mb-3">Archiver l'annonce</a>
                             {% endif %}
                             <br>
+                            <a href="{{ path('announce_share_facebook', {'id': announce.id}) }}" target="_blank">Partager sur Facebook</a>
+                            <br><br>
                             <button type="button" class="btn btn-danger mb-3" data-bs-toggle="modal"
                                     data-bs-target="#reportAnnounceModal">
                                 Signaler cette annonce

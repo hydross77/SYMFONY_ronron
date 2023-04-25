@@ -37,13 +37,13 @@
                     {% else %}
                         <li><a class="btn1" href="{{ path('app_login') }}">Connexion</a></li>
                     {% endif %}
-                    <li><a class="btn7" href="{{ path('app_result') }}">Rechercher un Chat</a></li>
+                    <li><a class="btn1" href="{{ path('app_result') }}">Rechercher un Chat</a></li>
                     {% if app.user %}
                     <li><a class="btn8" href="{{ path('app_new_cat') }}">Publier une annonce</a></li>
                     {% else %}
                     <li><a class="btn8" href="{{ path('app_new') }}">Publier une annonce</a></li>
                     {% endif %}
-                    <li><a class="btnDon" href="{{ path('app_donation_stripe') }}" target="_blank">Faire un don</a></li>
+                    <li><a class="btn1" href="{{ path('app_donation_stripe') }}" target="_blank">Faire un don</a></li>
                     {% if app.user %}
                     <li><a class="btn1" href="{{ path('app_logout') }}">Deconnexion</a></li>
                     {% endif %}
