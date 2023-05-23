@@ -13,13 +13,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 // l'extension permet de faire savoir a Symfony que la class est un formulaire
-class SearchForm2 extends SearchForm
+class SearchForm2 extends AbstractType
 {
 
     //construction du formulaire
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setMethod('GET') // Spécifie la méthode GET pour le formulaire
             ->add('type', ChoiceType::class, [
                 'label' => 'Perdu/Retrouvé :',
                 'required' => false,
@@ -62,63 +63,10 @@ class SearchForm2 extends SearchForm
                 'choices' => [
                     'Aucune' => 'Aucune',
                     'Abyssin' => 'Abyssin',
-                    'American Bobtail' => 'American Bobtail',
-                    'American Curl' => 'American Curl',
-                    'American Shorthair' => 'American Shorthair',
-                    'American Wirehair' => 'American Wirehair',
-                    'Balinese' => 'Balinese',
-                    'Bengal' => 'Bengal',
-                    'Birman' => 'Birman',
-                    'Bombay' => 'Bombay',
-                    'British Shorthair' => 'British Shorthair',
-                    'Burmese' => 'Burmese',
-                    'Burmilla' => 'Burmilla',
-                    'Chartreux' => 'Chartreux',
-                    'Chausie' => 'Chausie',
-                    'Colorpoint Shorthair' => 'Colorpoint Shorthair',
-                    'Cornish Rex' => 'Cornish Rex',
-                    'Cymric' => 'Cymric',
-                    'Devon Rex' => 'Devon Rex',
-                    'Don Sphynx' => 'Don Sphynx',
-                    'Egyptian Mau' => 'Egyptian Mau',
-                    'European Shorthair' => 'European Shorthair',
-                    'Exotic Shorthair' => 'Exotic Shorthair',
-                    'Havana Brown' => 'Havana Brown',
-                    'Himalayan' => 'Himalayan',
-                    'Japanese Bobtail' => 'Japanese Bobtail',
-                    'Javanese' => 'Javanese',
-                    'Korat' => 'Korat',
-                    'LaPerm' => 'LaPerm',
-                    'Maine Coon' => 'Maine Coon',
-                    'Manx' => 'Manx',
-                    'Munchkin' => 'Munchkin',
-                    'Nebelung' => 'Nebelung',
-                    'Norwegian Forest' => 'Norwegian Forest',
-                    'Ocicat' => 'Ocicat',
-                    'Oriental' => 'Oriental',
-                    'Persian' => 'Persian',
-                    'Peterbald' => 'Peterbald',
-                    'Pixie-bob' => 'Pixie-bob',
-                    'Ragdoll' => 'Ragdoll',
-                    'Russian Blue' => 'Russian Blue',
-                    'Savannah' => 'Savannah',
-                    'Scottish Fold' => 'Scottish Fold',
-                    'Selkirk Rex' => 'Selkirk Rex',
-                    'Siamese' => 'Siamese',
-                    'Siberian' => 'Siberian',
-                    'Singapura' => 'Singapura',
-                    'Snowshoe' => 'Snowshoe',
-                    'Sokoke' => 'Sokoke',
-                    'Somali' => 'Somali',
-                    'Sphynx' => 'Sphynx',
-                    'Tonkinese' => 'Tonkinese',
-                    'Turkish Angora' => 'Turkish Angora',
-                    'Turkish Van' => 'Turkish Van'
-
                 ],
             ])
             ->add('city', TextType::class, [
-                'required'=>false,
+                'required' => false,
                 'label' => false,
                 'attr' => ['class' => 'city'],
             ])
@@ -129,25 +77,22 @@ class SearchForm2 extends SearchForm
                 'expanded' => true,
                 'multiple' => true,
                 'choice_label' => 'name',
-                'choice_value' => function (?Color $color) {
-                    return $color ? $color->getId() : '';
-                },
+                'choice_value' => 'id',
                 'placeholder' => 'Choisir une couleur',
-                'by_reference' => false, // Ajoutez cette ligne
+                'by_reference' => false,
             ]);
-
     }
 
-    //configuration du formulaire
+    // Configuration du formulaire
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'method' => 'POST'
+            'csrf_protection' => false, // Désactive la protection CSRF pour les requêtes GET
         ]);
     }
 
     public function getBlockPrefix(): string
     {
-        return '';
+        return ''; // Retourne une chaîne vide pour éviter le préfixe du nom du formulaire
     }
 }

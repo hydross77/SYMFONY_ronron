@@ -31,23 +31,7 @@ class HomeController extends AbstractController
         $announces = $this->entityManager->getRepository(Announce::class);
 
 
-
-        $searchAnnounce = $this->createForm(SearchForm::class, null);
-        // crée le formulaire configuré dans le dossier FORM
-        $searchAnnounce->handleRequest($request);
-        // traite les données du formulaire
-
-
-        if ($searchAnnounce->isSubmitted() && $searchAnnounce->isValid()) {
-            // si le formulaire est envoyé et validé alors :
-            $request->query->remove('_token');
-            // on passe le formulaire a la fonction du repository qui est un tableau classic : AnnounceRepository.php
-
-            return $this->redirectToRoute('app_result', $request->query->all());
-        };
-
         return $this->render('home/index.html.twig', [
-            'searchAnnounce' => $searchAnnounce->createView(),
             'announces'=>$announces,
         ]);
     }

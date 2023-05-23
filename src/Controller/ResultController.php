@@ -22,6 +22,11 @@ class ResultController extends AbstractController
         $design = $request->request->get('design_coat');
         $sexe = $request->request->get('sexe');
 
+        $color = $request->request->get('color');
+
+
+
+
         $searchAnnounce = $this->createForm(SearchForm2::class, null);
         $searchAnnounce->handleRequest($request);
 
@@ -34,28 +39,25 @@ class ResultController extends AbstractController
                 'sexe' => $formData['sexe'],
                 'length_coat' => $formData['length_coat'],
                 'design_coat' => $formData['design_coat'],
-                'color' => $formData['color'] ? array_map('intval', array_filter($formData['color']->toArray(), 'is_scalar')) : null,
+                'color' => is_array($formData['color']) ? array_filter($formData['color'], 'is_scalar') : null,
             ];
-
-            $announces = $paginator->paginate(
-                $repository->findSearch($parameters),
-                $request->query->getInt('page', 1),
-                12
-            );
-        } else {
-            $announces = $paginator->paginate(
-                $repository->findSearch([
-                    'type' => $query,
-                    'city' => $city,
-                    'breed' => $breed,
-                    'sexe' => $sexe,
-                    'length_coat' => $length,
-                    'design_coat' => $design,
-                ]),
-                $request->query->getInt('page', 1),
-                12
-            );
         }
+        else {
+            $parameters = [
+                'type' => $query,
+                'city' => $city,
+                'breed' => $breed,
+                'sexe' => $sexe,
+                'length_coat' => $length,
+                'design_coat' => $design,
+                'color' => $color,
+            ];
+        }
+        $announces = $paginator->paginate(
+            $repository->findSearch($parameters),
+            $request->query->getInt('page', 1),
+            12
+        );
 
         return $this->render('result/index.html.twig', [
             'announces' => $announces,
