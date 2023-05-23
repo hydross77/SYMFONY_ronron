@@ -32,9 +32,7 @@ class AnnounceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a');
         $qb->orderBy('a.dateCat', 'DESC')
-            ->leftJoin('a.cat', 'cat')
-            ->leftJoin('cat.color', 'color');
-
+            ->leftJoin('a.cat', 'cat');
 
         if (!empty($parameters['type'])) {
             $qb->andWhere('a.type = :type')
@@ -65,15 +63,25 @@ class AnnounceRepository extends ServiceEntityRepository
             $qb->andWhere('cat.sexe = :sexe')
                 ->setParameter('sexe', $parameters['sexe']);
         }
-
         if (!empty($parameters['color'])) {
-            $colors = is_array($parameters['color']) ? $parameters['color'] : [$parameters['color']];
-            $qb->andWhere('color.id IN (:colors)')
-                ->setParameter('colors', $colors);
+            $subQuery = $this->createQueryBuilder('sub')
+                ->leftJoin('sub.cat', 'subCat')
+                ->leftJoin('subCat.color', 'subColor')
+                ->andWhere('subColor.id IN (:colors)')
+                ->andWhere('sub.id = a.id')
+                ->getDQL();
+
+            $qb->andWhere($qb->expr()->exists($subQuery))
+                ->setParameter('colors', $parameters['color']);
         }
+
 
         return $qb->getQuery();
     }
+
+
+
+
 
 
 
