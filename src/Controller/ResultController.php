@@ -21,11 +21,8 @@ class ResultController extends AbstractController
         $length = $request->request->get('length_coat');
         $design = $request->request->get('design_coat');
         $sexe = $request->request->get('sexe');
-
         $color = $request->request->get('color');
-
-
-
+        $date = $request->request->get('date_cat');
 
         $searchAnnounce = $this->createForm(SearchForm2::class, null);
         $searchAnnounce->handleRequest($request);
@@ -39,10 +36,10 @@ class ResultController extends AbstractController
                 'sexe' => $formData['sexe'],
                 'length_coat' => $formData['length_coat'],
                 'design_coat' => $formData['design_coat'],
-                'color' => is_array($formData['color']) ? array_filter($formData['color'], 'is_scalar') : null,
+                'color' => $formData['color'],
+                'date_cat' => $formData['date_cat'],
             ];
-        }
-        else {
+        } else {
             $parameters = [
                 'type' => $query,
                 'city' => $city,
@@ -53,8 +50,9 @@ class ResultController extends AbstractController
                 'date_cat' => $date,
             ];
         }
+
         $announces = $paginator->paginate(
-            $repository->findSearch($parameters),
+            $repository->findSearch($parameters, $date),
             $request->query->getInt('page', 1),
             12
         );
