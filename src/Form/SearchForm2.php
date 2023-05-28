@@ -7,6 +7,7 @@ use App\Entity\Color;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,6 +29,12 @@ class SearchForm2 extends AbstractType
                     'Perdu' => 'Perdu',
                     'Retrouvé' => 'Retrouvé',
                 ],
+            ])
+            ->add('date_cat', DateType::class, [
+                'label' => 'A partir de :',
+                'required' => false,
+                'widget' => 'single_text',
+                'attr' => ['class' => 'datepicker'],
             ])
             ->add('sexe', ChoiceType::class, [
                 'label' => false,

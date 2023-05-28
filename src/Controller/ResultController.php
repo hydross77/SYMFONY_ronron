@@ -50,7 +50,7 @@ class ResultController extends AbstractController
                 'sexe' => $sexe,
                 'length_coat' => $length,
                 'design_coat' => $design,
-                'color' => $color,
+                'date_cat' => $date,
             ];
         }
         $announces = $paginator->paginate(
@@ -65,5 +65,4 @@ class ResultController extends AbstractController
             'searchAnnounce2' => $searchAnnounce->createView()
         ]);
     }
-
 }
