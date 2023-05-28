@@ -1,10 +1,16 @@
-{{ form_start(form, {'method': 'POST'}) }}
+{{ form_start(form, {'method': 'GET'}) }}
+
 <div class="btnSearch2">{{ form_row(form.type) }}</div>
+<div class="btnSearch2">Date de début
+    {{ form_widget(form.date_cat, {'attr': {'class': 'datepicker'}}) }}
+</div><br>
+<div class="btnSearch2">Ville {{ form_row(form.city) }}</div>
 <div class="btnSearch2">Sexe {{ form_row(form.sexe) }}</div>
 <div class="btnSearch2">Poil {{ form_row(form.length_coat) }}</div>
 <div class="btnSearch2">Robe {{ form_row(form.design_coat) }}</div>
 <div class="btnSearch2">Race {{ form_row(form.breed) }}</div>
-<div class="btnSearch2">Ville {{ form_row(form.city) }}</div>
 <div class="btnSearch2">Couleur {{ form_row(form.color) }}</div>
+
 <button class="btnSoumission" type="submit">Rechercher</button>
+
 {{ form_end(form) }}

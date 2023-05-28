@@ -12,7 +12,6 @@
         <div class="resultat">
             {% if announces is not empty %}
                 {% for announce in announces %}
-                    {{ dump(announce.cat.color) }}
                     {% include 'result/_card.html.twig' with {announce: announce, user: user} only %}
                 {% endfor %}
             {% else %}
