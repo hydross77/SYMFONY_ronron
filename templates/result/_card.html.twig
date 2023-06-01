@@ -3,7 +3,7 @@
         {% if announce.cat.picture %}
             <img style="height: 200px; object-fit: cover" src="{{ asset('uploads/picturechat/' ~ announce.cat.picture) }}" alt="Photo du chat">
         {% else %}
-            <div class="display-3 text-center"><i style="height: 200px; object-fit: cover" class="fa-solid fa-laptop-code"></i></div>
+            <div class="display-3 text-center"><i style="height: 200px; object-fit: cover" class="fa-solid fa-cat"></i></div>
         {% endif %}
         <div class="card-body">
             <h5 class="card-title">{{ announce.cat.name }} | {{ announce.cat.sexe }}</h5>
