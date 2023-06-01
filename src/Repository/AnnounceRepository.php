@@ -48,37 +48,31 @@ class AnnounceRepository extends ServiceEntityRepository
                 ->setParameter('type', $parameters['type']);
         }
 
-        // Ajoute une condition pour filtrer par la ville spécifiée dans les paramètres
         if (!empty($parameters['city'])) {
             $qb->andWhere('a.city = :city')
                 ->setParameter('city', $parameters['city']);
         }
 
-        // Ajoute une condition pour filtrer par la race spécifiée dans les paramètres
         if (!empty($parameters['breed'])) {
             $qb->andWhere('cat.breed = :breed')
                 ->setParameter('breed', $parameters['breed']);
         }
 
-        // Ajoute une condition pour filtrer par la longueur du pelage spécifiée dans les paramètres
         if (!empty($parameters['length_coat'])) {
             $qb->andWhere('cat.lengthCoat = :lengthCoat')
                 ->setParameter('lengthCoat', $parameters['length_coat']);
         }
 
-        // Ajoute une condition pour filtrer par le motif du pelage spécifié dans les paramètres
         if (!empty($parameters['design_coat'])) {
             $qb->andWhere('cat.designCoat = :designCoat')
                 ->setParameter('designCoat', $parameters['design_coat']);
         }
 
-        // Ajoute une condition pour filtrer par la date de la catégorie spécifiée dans les paramètres
         if ($parameters['date_cat'] !== null) {
             $qb->andWhere($qb->expr()->gte('a.dateCat', ':date_cat'))
                 ->setParameter('date_cat', $parameters['date_cat']);
         }
 
-        // Ajoute une condition pour filtrer par le sexe du chat spécifié dans les paramètres
         if (!empty($parameters['sexe'])) {
             $qb->andWhere('cat.sexe = :sexe')
                 ->setParameter('sexe', $parameters['sexe']);
